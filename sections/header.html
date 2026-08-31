@@ -1,0 +1,42 @@
+<!-- header: global nav. Figma desktop 2186:313, mobile 2186:1943.
+     No background fill — floats transparently over the hero (both are siblings
+     starting at y=0 in the Figma frame; the hero's own top padding clears it).
+     Links, cart, and login are inert by design (no navigation targets, no cart).
+     Mobile hamburger is static — menu drawer is out of scope for this build. -->
+<header class="site-header" data-section="header">
+  <div class="page-container site-header__inner">
+
+    <button type="button" class="site-header__hamburger is-mobile-only" aria-label="Open menu" disabled aria-disabled="true">
+      <img src="/assets/icons/hamburger.svg" alt="" aria-hidden="true" />
+    </button>
+
+    <a href="/" class="site-header__logo is-mobile-only" aria-label="Farmers Juice — home">
+      <img src="/assets/icons/logo-icon.svg" alt="" aria-hidden="true" class="site-header__logo-icon" />
+      <img src="/assets/icons/logo-wordmark.svg" alt="Farmers Juice" class="site-header__logo-wordmark" />
+    </a>
+
+    <div class="site-header__spacer is-desktop-only" aria-hidden="true"></div>
+
+    <div class="site-header__center is-desktop-only">
+      <a href="#" class="site-header__link" tabindex="-1" aria-disabled="true">Explore</a>
+      <a href="/" class="site-header__center-logo" aria-label="Farmers Juice — home">
+        <img src="/assets/icons/logo-icon.svg" alt="" aria-hidden="true" class="site-header__logo-icon" />
+        <img src="/assets/icons/logo-wordmark.svg" alt="Farmers Juice" class="site-header__logo-wordmark" />
+      </a>
+      <a href="#" class="site-header__link site-header__link--dropdown" tabindex="-1" aria-disabled="true">
+        Shop Now
+        <img src="/assets/icons/chevron-down-small.svg" alt="" aria-hidden="true" />
+      </a>
+    </div>
+
+    <div class="site-header__actions">
+      <a href="#" class="site-header__cart" tabindex="-1" aria-disabled="true">Cart (0)</a>
+      <a href="#" class="site-header__login is-desktop-only" tabindex="-1" aria-disabled="true">
+        Login
+        <img src="/assets/icons/user.svg" alt="" aria-hidden="true" />
+      </a>
+      <img src="/assets/icons/user.svg" alt="" aria-hidden="true" class="site-header__user-icon is-mobile-only" />
+    </div>
+
+  </div>
+</header>

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "digestive-greens",
+    "title": "Digestive Greens",
+    "plants": 12,
+    "ingredients": "Cucumber, Celery, Fennel, Romaine Lettuce, Lemon, Parsley, Green Cabbage, Mint, Ginger, Apple Cider Vinegar, Turmeric, Basil",
+    "image": "/images/cards/digestive-greens.png",
+    "gradient": ["#fdd8c4", "#faaf92"],
+    "badge": null,
+    "categories": ["green-juices"]
+  },
+  {
+    "id": "gut-cleanse-greens",
+    "title": "Gut Cleanse Greens",
+    "plants": 10,
+    "ingredients": "Cucumber, Jicama, Fennel, Ginger Tea, Lemon, Pineapple, Guar Fiber, Ginger, Turmeric, Wheat Grass Powder",
+    "image": "/images/cards/gut-cleanse-greens.png",
+    "gradient": ["#dbefc1", "#b4db8e"],
+    "badge": "NEW",
+    "categories": ["green-juices"]
+  },
+  {
+    "id": "focus-greens",
+    "title": "Focus Greens",
+    "plants": 11,
+    "ingredients": "Cucumber, Jicama, Fennel, Lemon, Mint Tea (Water, Mint), Mint, Basil, Peach, Turmeric, Ginger, Coffee Berry Extract",
+    "image": "/images/cards/focus-greens.png",
+    "gradient": ["#fff3b2", "#ffe37a"],
+    "badge": "NEW",
+    "categories": ["green-juices", "immunity"]
+  },
+  {
+    "id": "calming-greens",
+    "title": "Calming Greens",
+    "plants": 8,
+    "ingredients": "Cucumber, Spinach, Jicama, Chamomile Tea (Water Chamomile), Apple, Lemon, Basil, Sunfiber (Guar Fiber), Suntheanine (L-theanine)",
+    "image": "/images/cards/calming-greens.png",
+    "gradient": ["#fdcb54", "#fb9b2a"],
+    "badge": "NEW",
+    "categories": ["green-juices", "smoothies"]
+  },
+  {
+    "id": "electrolyte-greens",
+    "title": "Electrolyte Greens",
+    "plants": 6,
+    "ingredients": "Cucumber, Watermelon, Spinach, Coconut Water, Lemon, Basil, Pink Himalayan Salt",
+    "image": "/images/cards/electrolyte-greens.png",
+    "gradient": ["#dbefc1", "#b4db8e"],
+    "badge": null,
+    "categories": ["green-juices", "electrolytes"]
+  },
+  {
+    "id": "green-athlete",
+    "title": "Green Athlete",
+    "plants": 12,
+    "ingredients": "Cucumber, Celery, Fennel, Basil, Green Cabbage, Mint, Romaine Lettuce, Lemon, Ginger, Maca, Turmeric, Black Pepper",
+    "image": "/images/cards/green-athlete.png",
+    "gradient": ["#fff3b2", "#ffe37a"],
+    "badge": null,
+    "categories": ["green-juices", "immunity"]
+  },
+  {
+    "id": "hydration-greens",
+    "title": "Hydration Greens",
+    "plants": 6,
+    "ingredients": "Cucumber, Watermelon, Spinach, Coconut Water, Lemon, Basil",
+    "image": "/images/cards/hydration-greens.png",
+    "gradient": ["#fdcb54", "#fb9b2a"],
+    "badge": null,
+    "categories": ["green-juices", "electrolytes"]
+  },
+  {
+    "id": "matcha-greens",
+    "title": "Matcha Greens",
+    "plants": 10,
+    "ingredients": "Cucumber, Jicama, Spinach, Celery, Lemon, Fennel, Pineapple, Sunfiber (Guar Fiber), Ginger, Matcha Powder",
+    "image": "/images/cards/matcha-greens.png",
+    "gradient": ["#fdd8c4", "#faaf92"],
+    "badge": "POPULAR",
+    "categories": ["green-juices", "smoothies"]
+  },
+  {
+    "id": "peaceful-greens",
+    "title": "Peaceful Greens",
+    "plants": 11,
+    "ingredients": "Cucumber, Celery, Fennel, Romaine Lettuce, Lemon, Green Cabbage, Ginger, Mint, Turmeric, Basil, Chamomile Flower.",
+    "image": "/images/cards/peaceful-greens.png",
+    "gradient": ["#dbefc1", "#b4db8e"],
+    "badge": "POPULAR",
+    "categories": ["green-juices", "smoothies"]
+  },
+  {
+    "id": "performance-greens",
+    "title": "Performance Greens",
+    "plants": 12,
+    "ingredients": "Cucumber, Romaine Lettuce, Celery, Fennel, Lemon, Green Cabbage, Ginger, Cilantro, Turmeric, Mint, Basil, Lion’s Mane.",
+    "image": "/images/cards/performance-greens.png",
+    "gradient": ["#fff3b2", "#ffe37a"],
+    "badge": null,
+    "categories": ["green-juices", "immunity"]
+  }
+]

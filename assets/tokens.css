@@ -4,9 +4,11 @@
    section product-page-section / node 2186:162).
    Do not hand-edit values — regenerate from Figma if they change.
 
-   Note: Figma letterSpacing is -1 (unitless in Figma = -1px here).
-   Verify against a rendered frame; adjust globally via
-   --tracking-tight if it reads too tight in-browser.
+   Note: Figma letterSpacing "-1" is -1%, proportional to each text
+   style's own font-size (confirmed against exported tracking values:
+   -0.12px@12px, -0.16px@16px, -0.2px@20px, -0.24px@24px, -0.32px@32px —
+   all exactly -1%). Expressed in em so it scales correctly per element
+   instead of applying one fixed px value to every font size.
    ============================================================ */
 
 :root {
@@ -27,6 +29,7 @@
 
   /* ---- Secondary ---- */
   --color-turquoise:            #3ddac9;  /* Secondary/Turqoise */
+  --color-shoppay-purple:       #5433eb;  /* Shop Pay button fill (from design, not a named Figma variable) */
 
   /* ---- Text ---- */
   --color-text-primary:         #2c2e33;  /* text/primary */
@@ -61,9 +64,10 @@
   --weight-semibold:  625;  /* SemiBold */
   --weight-regular:   400;  /* Peperoncino Regular */
 
-  --tracking-tight: -1px;   /* global letterSpacing from Figma */
+  --tracking-tight: -0.01em; /* global letterSpacing from Figma: -1%, scales with font-size */
 
   /* ---- Font sizes ---- */
+  --fs-body-xxs:          12px;
   --fs-body-small:        14px;
   --fs-body-medium:       16px;
   --fs-body-large:        20px;
@@ -80,6 +84,7 @@
   --fs-heading-h2:        56px;
 
   /* ---- Line heights (px in Figma; keep as unitless-in-px pairs) ---- */
+  --lh-body-xxs:          16px;
   --lh-body-small:        20px;
   --lh-body-medium:       24px;
   --lh-paragraph-small:   24px;
@@ -131,6 +136,19 @@
   --space-10: 40px;
   --space-14: 56px;
   --space-16: 64px;
+
+  /* ---- Component-specific one-offs (not on the 8pt scale, observed from the hero frame) ---- */
+  --hero-column-gap: 80px;          /* gap between gallery and buy-box columns, desktop */
+  --hero-block-start-desktop: 128px; /* hero top inner padding, desktop (measured 127px) */
+  --hero-block-start-mobile: 80px;   /* hero top inner padding, mobile */
+
+  --nav-item-gap: 51px;    /* gap flanking the logo (Explore/Shop Now), desktop nav */
+  --nav-actions-gap: 25px; /* gap between Cart and Login, desktop nav */
+
+  /* Literal line-height override baked into one specific Figma text style
+     (Paragraph/Semibold/Medium) — tighter than the shared
+     --lh-paragraph-medium (32px) token used everywhere else at 20px. */
+  --lh-paragraph-medium-tight: 26px;
 }
 
 /* ============================================================

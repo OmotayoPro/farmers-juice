@@ -1,1 +1,197 @@
-/* Resets, typography, layout primitives. Not yet built. */
+/* ============================================================
+   Farmers Juice — Base
+   Resets, self-hosted fonts, layout primitives.
+   ============================================================ */
+
+@font-face {
+  font-family: "Campton";
+  src: url("./fonts/campton/Campton Book.otf") format("opentype");
+  font-weight: var(--weight-book);
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Campton";
+  src: url("./fonts/campton/Campton Book Italic.otf") format("opentype");
+  font-weight: var(--weight-book);
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Campton";
+  src: url("./fonts/campton/Campton Medium.otf") format("opentype");
+  font-weight: var(--weight-medium);
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Campton";
+  src: url("./fonts/campton/Campton Medium Italic.otf") format("opentype");
+  font-weight: var(--weight-medium);
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Campton";
+  src: url("./fonts/campton/Campton SemiBold.otf") format("opentype");
+  font-weight: var(--weight-semibold);
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Campton";
+  src: url("./fonts/campton/Campton SemiBold Italic.otf") format("opentype");
+  font-weight: var(--weight-semibold);
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Campton";
+  src: url("./fonts/campton/Campton Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Campton";
+  src: url("./fonts/campton/Campton Bold Italic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Campton";
+  src: url("./fonts/campton/Campton Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Peperoncino Sans";
+  src: url("./fonts/peperoncino-sans/Peperoncino Sans Regular.otf") format("opentype");
+  font-weight: var(--weight-regular);
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---- Reset ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+h1, h2, h3, h4, h5, h6,
+p, ol, ul {
+  margin: 0;
+  padding: 0;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: var(--weight-book);
+  color: var(--color-text-body);
+  background: var(--color-white);
+  letter-spacing: var(--tracking-tight);
+  -webkit-font-smoothing: antialiased;
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Layout primitives ---- */
+.page-container {
+  width: 100%;
+  max-width: var(--container-desktop);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter-mobile);
+}
+
+@media (min-width: 1025px) {
+  .page-container {
+    padding-inline: calc((var(--container-desktop) - var(--container-content)) / 2);
+  }
+}
+
+/* The hero is full-bleed in the design (bg-art runs edge to edge) and its own
+   content already measures exactly --container-desktop (1280px) with no extra
+   gutter at the confirmed breakpoint — unlike below-fold sections, which use
+   the narrower --container-content gutter above. */
+.pdp-hero .page-container {
+  max-width: var(--container-desktop);
+}
+
+@media (min-width: 1025px) {
+  .pdp-hero .page-container {
+    padding-inline: 0;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive show/hide — the design diverges in content (not just layout)
+   between mobile and desktop, so each breakpoint gets its own markup block. */
+.is-mobile-only {
+  display: block;
+}
+.is-desktop-only {
+  display: none;
+}
+
+@media (min-width: 1025px) {
+  .is-mobile-only {
+    display: none;
+  }
+  .is-desktop-only {
+    display: block;
+  }
+}

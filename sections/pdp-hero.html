@@ -1,1 +1,188 @@
-<!-- Hero: gallery + buy box. Not yet built. See component-inventory.md §2-4. -->
+<!-- pdp-hero: gallery + buy box. Figma desktop 2186:164, mobile 2186:1804.
+     Maps to a Liquid section; {{ product.* }} call-outs mark where real
+     Shopify data replaces the hardcoded fixture values from content/greens.json. -->
+<section class="pdp-hero" data-section="pdp-hero" data-product="greens">
+  <div class="page-container">
+    <div class="pdp-hero__grid">
+
+      <!-- gallery: {{ product.images }} -->
+      <div class="pdp-hero__gallery">
+        <div class="gallery" data-gallery>
+          <div class="gallery__rail">
+            <button type="button" class="gallery__arrow gallery__arrow--up" data-gallery-prev aria-label="Previous image">
+              <img src="/assets/icons/arrow-up.svg" alt="" aria-hidden="true" />
+            </button>
+            <div class="gallery__thumbnails" data-gallery-thumbnails>
+              <button type="button" class="gallery__thumbnail is-active" data-gallery-thumb="0" aria-label="Show image 1" aria-current="true">
+                <img src="/images/gallery/gallery-1.png" alt="" loading="eager" />
+              </button>
+              <button type="button" class="gallery__thumbnail" data-gallery-thumb="1" aria-label="Show image 2">
+                <img src="/images/gallery/gallery-2.png" alt="" loading="lazy" />
+              </button>
+              <button type="button" class="gallery__thumbnail" data-gallery-thumb="2" aria-label="Show image 3">
+                <img src="/images/gallery/gallery-3.png" alt="" loading="lazy" />
+              </button>
+              <button type="button" class="gallery__thumbnail" data-gallery-thumb="3" aria-label="Show image 4">
+                <img src="/images/gallery/gallery-4.png" alt="" loading="lazy" />
+              </button>
+              <button type="button" class="gallery__thumbnail" data-gallery-thumb="4" aria-label="Show image 5">
+                <img src="/images/gallery/gallery-5.png" alt="" loading="lazy" />
+              </button>
+              <button type="button" class="gallery__thumbnail" data-gallery-thumb="5" aria-label="Show image 6">
+                <img src="/images/gallery/gallery-6.png" alt="" loading="lazy" />
+              </button>
+              <button type="button" class="gallery__thumbnail" data-gallery-thumb="6" aria-label="Show image 7">
+                <img src="/images/gallery/gallery-7.png" alt="" loading="lazy" />
+              </button>
+            </div>
+            <button type="button" class="gallery__arrow gallery__arrow--down" data-gallery-next aria-label="Next image">
+              <img src="/assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
+            </button>
+          </div>
+          <div class="gallery__viewer">
+            <img data-gallery-main src="/images/gallery/gallery-1.png" alt="Greens Only Box — product photo" />
+          </div>
+        </div>
+      </div>
+
+      <!-- menu / nutrition-facts trigger — opens the nutrition modal (built in a later section) -->
+      <div class="pdp-hero__navbtn">
+        <button type="button" class="nutrition-trigger" data-nutrition-trigger>
+          <span>View menu and nutrition facts</span>
+          <img src="/assets/icons/chevron-right.svg" alt="" aria-hidden="true" />
+        </button>
+      </div>
+
+      <!-- customer-support call-out -->
+      <div class="pdp-hero__call">
+        <div class="support-card">
+          <span class="support-card__icon">
+            <img src="/assets/icons/call-icon.svg" alt="" aria-hidden="true" />
+          </span>
+          <div class="support-card__body">
+            <p class="support-card__prompt is-desktop-only">Need help with your order?</p>
+            <p class="support-card__phone"><span>Call or Text</span> <a href="tel:+12138055544">(213) 805-5544</a></p>
+            <p class="support-card__note">Our juice team is happy to help</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- category select box — {{ product.title }}. Visual only: opens to reveal other
+           products but does not navigate (only Greens exists in this build). -->
+      <div class="pdp-hero__dropdown">
+        <div class="select-box">
+          <button type="button" class="select-box__trigger" data-dropdown-trigger aria-expanded="false" aria-controls="product-select-panel">
+            <span class="select-box__label">Select box</span>
+            <span class="select-box__value-row">
+              <span class="select-box__value">Greens Only Box (Low Sugar)</span>
+              <img src="/assets/icons/chevron-down.svg" alt="" aria-hidden="true" class="select-box__chevron" />
+            </span>
+          </button>
+          <ul class="select-box__panel" id="product-select-panel" data-dropdown-panel hidden>
+            <li><button type="button" class="select-box__option is-selected" aria-current="true">Greens Only Box (Low Sugar)</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- buy box: rating, badges, options, subscription, price, CTAs -->
+      <div class="pdp-hero__buybox">
+
+        <div class="rating">
+          <span class="rating__value">4.9</span>
+          <span class="rating__stars" aria-hidden="true">
+            <img src="/assets/icons/star.svg" alt="" />
+            <img src="/assets/icons/star.svg" alt="" />
+            <img src="/assets/icons/star.svg" alt="" />
+            <img src="/assets/icons/star.svg" alt="" />
+            <img src="/assets/icons/star.svg" alt="" />
+          </span>
+          <span class="rating__count">(1,003)</span>
+          <span class="rating__recent">|&nbsp; 2.7k bought in past month</span>
+        </div>
+
+        <ul class="checkmarks is-desktop-only">
+          <li>Cold-pressed &amp; nutrient-dense</li>
+          <li>Family owned and small batch made</li>
+          <li>Ships in 1 business day: all 48 states.</li>
+        </ul>
+        <ul class="checkmarks is-mobile-only">
+          <li>1.5 pounds plants in a juice!</li>
+          <li>Low sugar &amp; Small batch made ❤️</li>
+          <li>Ships in 1 business day</li>
+        </ul>
+
+        <ul class="badges is-desktop-only">
+          <li><img src="/assets/icons/gut-pounds.png" alt="" /><span>1.5 pounds<br />plants per juice</span></li>
+          <li><img src="/assets/icons/gut-support.png" alt="" /><span>Daily gut<br />support</span></li>
+          <li><img src="/assets/icons/usda-badge.svg" alt="USDA Organic" /><span>No glyphosate<br />allowed</span></li>
+        </ul>
+        <ul class="badges is-mobile-only">
+          <li><img src="/assets/icons/heart.png" alt="" /><span>family<br />owned</span></li>
+          <li><img src="/assets/icons/usda-badge.svg" alt="USDA Organic" /><span>no glyphosate<br />allowed</span></li>
+          <li><img src="/assets/icons/gut-support.png" alt="" /><span>Daily gut<br />support</span></li>
+        </ul>
+
+        <div class="option-group" data-option-group>
+          <p class="option-group__label">1. Select type</p>
+          <div class="option-row" role="group" aria-label="Select type">
+            <button type="button" class="option-btn is-selected" data-option-btn>Juices Only</button>
+            <button type="button" class="option-btn" data-option-btn>Juices + Shots</button>
+          </div>
+        </div>
+
+        <div class="option-group" data-option-group>
+          <p class="option-group__label option-group__label--size">2. Select size</p>
+          <div class="option-row option-row--size" role="group" aria-label="Select size">
+            <button type="button" class="option-btn option-btn--tagged is-selected" data-option-btn>
+              <span class="option-btn__tag">Full box</span>
+              <span class="option-btn__label">21 Juices</span>
+            </button>
+            <button type="button" class="option-btn option-btn--tagged" data-option-btn>
+              <span class="option-btn__tag">Medium box</span>
+              <span class="option-btn__label">12 Juices + 5 Shots</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="option-group" data-option-group>
+          <p class="option-group__label">3. Flavors</p>
+          <div class="option-row" role="group" aria-label="Flavors">
+            <button type="button" class="option-btn is-selected" data-option-btn>Most Popular</button>
+            <button type="button" class="option-btn" data-option-btn>Customize</button>
+          </div>
+        </div>
+
+        <div class="subscription">
+          <button type="button" class="subscription__row" data-subscription-trigger aria-expanded="false">
+            <span>Delivery every <span class="subscription__value">21 Days Save (15%)</span></span>
+            <img src="/assets/icons/chevron-down.svg" alt="" aria-hidden="true" />
+          </button>
+          <p class="subscription__note">(Pause or Cancel anytime)</p>
+        </div>
+
+        <div class="price">
+          <span class="price__compare-at">$250.00</span>
+          <span class="price__current">$96.40</span>
+        </div>
+
+        <div class="cta-stack">
+          <button type="button" class="cta-btn cta-btn--primary" disabled aria-disabled="true">
+            proceed to checkout →
+          </button>
+          <button type="button" class="cta-btn cta-btn--shoppay" disabled aria-disabled="true">
+            <span>Buy with</span>
+            <img src="/assets/icons/shop-pay-logo.svg" alt="Shop Pay" />
+          </button>
+          <p class="cta-more-options"><button type="button" disabled aria-disabled="true">More payment options</button></p>
+          <p class="cta-legal">
+            This item is a deferred, subscription, or recurring purchase. By continuing, I agree to the
+            <span class="cta-legal__link">cancellation policy</span>
+            and authorize you to charge my payment method at the prices, frequency and dates listed on this page until my order is fulfilled or I cancel, if permitted.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>

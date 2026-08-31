@@ -1,1 +1,80 @@
-{}
+{
+  "handle": "greens-only-box",
+  "title": "Greens Only Box (Low Sugar)",
+  "rating": {
+    "value": 4.9,
+    "count": 1003,
+    "recentlyBought": "2.7k bought in past month"
+  },
+  "gallery": [
+    "/images/gallery/gallery-1.png",
+    "/images/gallery/gallery-2.png",
+    "/images/gallery/gallery-3.png",
+    "/images/gallery/gallery-4.png",
+    "/images/gallery/gallery-5.png",
+    "/images/gallery/gallery-6.png",
+    "/images/gallery/gallery-7.png"
+  ],
+  "checkmarksDesktop": [
+    "Cold-pressed & nutrient-dense",
+    "Family owned and small batch made",
+    "Ships in 1 business day: all 48 states."
+  ],
+  "checkmarksMobile": [
+    "1.5 pounds plants in a juice!",
+    "Low sugar & Small batch made ❤️",
+    "Ships in 1 business day"
+  ],
+  "badgesDesktop": [
+    { "icon": "gut-pounds.png", "label": "1.5 pounds\nplants per juice" },
+    { "icon": "gut-support.png", "label": "Daily gut\nsupport" },
+    { "icon": "usda-badge.svg", "label": "No glyphosate\nallowed" }
+  ],
+  "badgesMobile": [
+    { "icon": "heart.png", "label": "family\nowned" },
+    { "icon": "usda-badge.svg", "label": "no glyphosate\nallowed" },
+    { "icon": "gut-support.png", "label": "Daily gut\nsupport" }
+  ],
+  "options": {
+    "type": {
+      "label": "1. Select type",
+      "choices": ["Juices Only", "Juices + Shots"],
+      "selected": 0
+    },
+    "size": {
+      "label": "2. Select size",
+      "choices": [
+        { "tag": "Full box", "label": "21 Juices" },
+        { "tag": "Medium box", "label": "12 Juices + 5 Shots" }
+      ],
+      "selected": 0
+    },
+    "flavors": {
+      "label": "3. Flavors",
+      "choices": ["Most Popular", "Customize"],
+      "selected": 0
+    }
+  },
+  "subscription": {
+    "frequency": "21 Days",
+    "discount": "Save (15%)",
+    "note": "(Pause or Cancel anytime)"
+  },
+  "price": {
+    "compareAt": "$250.00",
+    "current": "$96.40"
+  },
+  "ctas": {
+    "primary": "proceed to checkout →",
+    "shopPay": "Buy with Shop",
+    "morePaymentOptions": "More payment options",
+    "legal": "This item is a deferred, subscription, or recurring purchase. By continuing, I agree to the cancellation policy and authorize you to charge my payment method at the prices, frequency and dates listed on this page until my order is fulfilled or I cancel, if permitted."
+  },
+  "nutritionTrigger": "View menu and nutrition facts",
+  "support": {
+    "prompt": "Need help with your order?",
+    "callLabel": "Call or Text",
+    "phone": "(213) 805-5544",
+    "note": "Our juice team is happy to help"
+  }
+}

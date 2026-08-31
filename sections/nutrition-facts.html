@@ -1,1 +1,80 @@
-<!-- Nutrition modal markup (modal + zoom, layered state machine). Not yet built. See component-inventory.md §5. -->
+<!-- nutrition-facts: layered modal (Figma desktop 2186:1456 / mobile 2186:2798)
+     + zoom expanded state (desktop 2186:1488 / mobile 2186:2825).
+     State machine: closed -> modal open -> zoom open, X/Back/Esc/backdrop
+     each pop exactly one level. See CLAUDE.md for the full spec. -->
+<div class="nutrition-overlay" data-nutrition-overlay hidden>
+  <div class="nutrition-overlay__backdrop" data-nutrition-backdrop></div>
+
+  <div class="nutrition-modal" role="dialog" aria-modal="true" aria-labelledby="nutrition-modal-title" data-nutrition-modal>
+    <button type="button" class="nutrition-modal__close" data-nutrition-close aria-label="Close nutrition facts">
+      <img src="/assets/icons/close-dark.svg" alt="" aria-hidden="true" />
+    </button>
+
+    <h2 id="nutrition-modal-title" class="nutrition-modal__title">Menu and<br />Nutrition Fact</h2>
+
+    <div class="nutrition-filters" data-nutrition-filters role="group" aria-label="Filter nutrition facts by category">
+      <button type="button" class="nutrition-filter is-selected" data-nutrition-filter="green-juices">
+        <span>Green Juices</span>
+        <img src="/assets/icons/filter-green-juices.png" alt="" aria-hidden="true" />
+      </button>
+      <button type="button" class="nutrition-filter" data-nutrition-filter="fiber">
+        <span>Fiber</span>
+        <img src="/assets/icons/filter-fiber.png" alt="" aria-hidden="true" />
+      </button>
+      <button type="button" class="nutrition-filter" data-nutrition-filter="immunity">
+        <span>Immunity</span>
+        <img src="/assets/icons/filter-immunity.png" alt="" aria-hidden="true" />
+      </button>
+      <button type="button" class="nutrition-filter" data-nutrition-filter="smoothies">
+        <span>Smoothies</span>
+        <img src="/assets/icons/filter-smoothies.png" alt="" aria-hidden="true" />
+      </button>
+      <button type="button" class="nutrition-filter" data-nutrition-filter="electrolytes">
+        <span>Electrolytes</span>
+        <img src="/assets/icons/filter-electrolytes.png" alt="" aria-hidden="true" />
+      </button>
+      <button type="button" class="nutrition-filter" data-nutrition-filter="shots">
+        <span>Shots</span>
+        <img src="/assets/icons/filter-shots.png" alt="" aria-hidden="true" />
+      </button>
+    </div>
+
+    <div class="nutrition-grid" data-nutrition-grid>
+      <button type="button" class="nutrition-grid__item" data-nutrition-image aria-label="View enlarged nutrition facts, image 1">
+        <img src="/images/nutrition/nutrition-facts.png" alt="Digestive Greens nutrition facts and ingredients" />
+      </button>
+      <button type="button" class="nutrition-grid__item" data-nutrition-image aria-label="View enlarged nutrition facts, image 2">
+        <img src="/images/nutrition/nutrition-facts.png" alt="Digestive Greens nutrition facts and ingredients" />
+      </button>
+      <button type="button" class="nutrition-grid__item" data-nutrition-image aria-label="View enlarged nutrition facts, image 3">
+        <img src="/images/nutrition/nutrition-facts.png" alt="Digestive Greens nutrition facts and ingredients" />
+      </button>
+      <button type="button" class="nutrition-grid__item is-desktop-only" data-nutrition-image aria-label="View enlarged nutrition facts, image 4">
+        <img src="/images/nutrition/nutrition-facts.png" alt="Digestive Greens nutrition facts and ingredients" />
+      </button>
+      <button type="button" class="nutrition-grid__item is-desktop-only" data-nutrition-image aria-label="View enlarged nutrition facts, image 5">
+        <img src="/images/nutrition/nutrition-facts.png" alt="Digestive Greens nutrition facts and ingredients" />
+      </button>
+      <button type="button" class="nutrition-grid__item is-desktop-only" data-nutrition-image aria-label="View enlarged nutrition facts, image 6">
+        <img src="/images/nutrition/nutrition-facts.png" alt="Digestive Greens nutrition facts and ingredients" />
+      </button>
+      <button type="button" class="nutrition-grid__item is-desktop-only" data-nutrition-image aria-label="View enlarged nutrition facts, image 7">
+        <img src="/images/nutrition/nutrition-facts.png" alt="Digestive Greens nutrition facts and ingredients" />
+      </button>
+      <button type="button" class="nutrition-grid__item is-desktop-only" data-nutrition-image aria-label="View enlarged nutrition facts, image 8">
+        <img src="/images/nutrition/nutrition-facts.png" alt="Digestive Greens nutrition facts and ingredients" />
+      </button>
+    </div>
+  </div>
+
+  <div class="nutrition-zoom" data-nutrition-zoom hidden>
+    <button type="button" class="nutrition-zoom__back" data-nutrition-back>
+      <img src="/assets/icons/arrow-left.svg" alt="" aria-hidden="true" />
+      <span>Back</span>
+    </button>
+    <button type="button" class="nutrition-zoom__close" data-nutrition-close-zoom aria-label="Close nutrition facts">
+      <img src="/assets/icons/close-light.svg" alt="" aria-hidden="true" />
+    </button>
+    <img class="nutrition-zoom__image" data-nutrition-zoom-image src="/images/nutrition/nutrition-facts.png" alt="Digestive Greens nutrition facts and ingredients, enlarged" />
+  </div>
+</div>
