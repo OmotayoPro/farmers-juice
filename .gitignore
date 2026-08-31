@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.vercel/
+.DS_Store
+
+# raw font drops — needed weights already copied into assets/fonts/
+Campton/
+Peperoncino Sans/
