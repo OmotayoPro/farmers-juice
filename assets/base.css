@@ -152,17 +152,16 @@ body.no-scroll {
   }
 }
 
-/* The hero is full-bleed in the design (bg-art runs edge to edge) and its own
-   content already measures exactly --container-desktop (1280px) with no extra
-   gutter at the confirmed breakpoint — unlike below-fold sections, which use
-   the narrower --container-content gutter above. */
+/* The hero is full-bleed in the design (bg-art runs edge to edge). Its own
+   content uses a flat 80px side padding rather than the narrower
+   --container-content gutter used by below-fold sections. */
 .pdp-hero .page-container {
-  max-width: var(--container-desktop);
+  max-width: none;
 }
 
 @media (min-width: 1025px) {
   .pdp-hero .page-container {
-    padding-inline: 0;
+    padding-inline: 80px;
   }
 }
 

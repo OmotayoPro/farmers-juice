@@ -44,6 +44,8 @@ function initGallery(root) {
 
   thumbs.forEach((thumb, i) => {
     thumb.addEventListener("click", () => setActive(i));
+    thumb.addEventListener("mouseenter", () => setActive(i));
+    thumb.addEventListener("focus", () => setActive(i));
   });
 
   if (prevBtn) prevBtn.addEventListener("click", () => setActive(activeIndex - 1));

@@ -291,6 +291,7 @@
 }
 
 .gallery__arrow {
+  position: relative;
   display: none;
   align-items: center;
   justify-content: center;
@@ -299,14 +300,49 @@
   flex-shrink: 0;
 }
 
-.gallery__arrow img {
+/* Two stacked icons crossfade on hover/focus rather than swapping src
+   (CSS can't retarget an <img> src). max-width:none + flex-shrink:0
+   override the global img reset, which otherwise lets the flex layout
+   here squash a same-size replaced element to a non-square box. The
+   source SVGs are drawn sideways — Figma's own export rotates them
+   -90deg + flips vertically to reach the up/down arrows shown in the
+   design, so we reproduce that same transform here. */
+.gallery__arrow-icon {
+  position: absolute;
+  inset: 0;
   width: 32px;
   height: 32px;
+  max-width: none;
+  flex-shrink: 0;
+  transform: rotate(-90deg) scaleY(-1);
+  transition: opacity 0.15s ease;
+}
+
+.gallery__arrow-icon--hover {
+  opacity: 0;
+}
+
+.gallery__arrow:hover .gallery__arrow-icon--default,
+.gallery__arrow:focus-visible .gallery__arrow-icon--default {
+  opacity: 0;
+}
+
+.gallery__arrow:hover .gallery__arrow-icon--hover,
+.gallery__arrow:focus-visible .gallery__arrow-icon--hover {
+  opacity: 1;
 }
 
 .gallery__arrow:disabled {
   opacity: 0.3;
   cursor: default;
+}
+
+.gallery__arrow:disabled:hover .gallery__arrow-icon--default {
+  opacity: 1;
+}
+
+.gallery__arrow:disabled:hover .gallery__arrow-icon--hover {
+  opacity: 0;
 }
 
 .gallery__arrow:focus-visible {
