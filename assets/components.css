@@ -203,21 +203,54 @@
   padding-block-start: var(--hero-block-start-mobile);
 }
 
+/* On mobile this wrapper doesn't participate in layout at all — its
+   children fall back to being individual grid items placed by the
+   grid-area rules below, matching the areas listed above. */
+.pdp-hero__left-col {
+  display: contents;
+}
+
 @media (min-width: 1025px) {
   .pdp-hero__grid {
     grid-template-columns: 601px 1fr;
     grid-template-areas:
-      "gallery dropdown"
-      "gallery buybox"
-      "navbtn  buybox"
-      "call    buybox";
+      "left-col dropdown"
+      "left-col buybox";
     column-gap: var(--hero-column-gap);
-    row-gap: var(--space-2);
     padding-block-start: var(--hero-block-start-desktop);
+  }
+
+  /* gallery + navbtn + call become one independent flex column (Figma
+     carousel-contact-div, 2191:4517) instead of 3 separate grid rows.
+     That matters because buybox spans the whole right column: sharing
+     its row-tracks previously inflated navbtn/call's tracks to help
+     cover buybox's height (CSS Grid distributes a spanning item's extra
+     height across every auto track it crosses), even though the
+     buttons themselves only needed ~38px/~122px. A flex column has no
+     such cross-column coupling — each child sizes to its own content. */
+  .pdp-hero__left-col {
+    display: flex;
+    flex-direction: column;
+    grid-area: left-col;
+    align-self: start;
+    gap: var(--space-2);
+    position: sticky;
+    top: 80px;
   }
 
   .pdp-hero__gallery {
     margin-block-end: var(--space-2);
+  }
+
+  /* hero-menu-contact (Figma 2191:4533): a fixed 513px zone flush with the
+     main viewer (88px = 64px rail + 24px gap), not the full gallery column —
+     the 359px button/card inside is centered within that zone. */
+  .pdp-hero__navbtn,
+  .pdp-hero__call {
+    display: flex;
+    justify-content: center;
+    width: 513px;
+    margin-inline-start: 88px;
   }
 }
 
@@ -421,6 +454,13 @@
   outline-offset: 2px;
 }
 
+@media (min-width: 1025px) {
+  .nutrition-trigger {
+    width: 359px;
+    flex-shrink: 0;
+  }
+}
+
 /* ---- Customer-support card / badge ---- */
 .support-card {
   display: flex;
@@ -453,7 +493,7 @@
   flex-direction: column;
   gap: var(--space-1);
   padding-block: var(--space-2);
-  padding-inline-start: var(--space-4);
+  padding-inline: var(--space-4);
   border-left: 1px dashed var(--color-green-800);
 }
 
@@ -469,7 +509,7 @@
 
 .support-card__phone {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-1);
 }
 
@@ -500,6 +540,8 @@
 
 @media (min-width: 1025px) {
   .support-card {
+    width: 359px;
+    flex-shrink: 0;
     background: var(--color-white);
     border: 1px solid var(--color-border-dark);
     padding-block: var(--space-2);
@@ -515,6 +557,22 @@
     height: 26px;
   }
 
+  /* Desktop's text block: 4px vertical padding, no gap between the three
+     lines — they rely on their own line-heights for spacing instead. */
+  .support-card__body {
+    gap: 0;
+    padding-block: var(--space-1);
+  }
+
+  .support-card__prompt {
+    line-height: var(--lh-body-small);
+  }
+
+  .support-card__phone span {
+    font-size: var(--fs-body-small);
+    line-height: var(--lh-body-small);
+  }
+
   .support-card__phone a {
     font-size: var(--fs-title-small);
     line-height: var(--lh-title-small);
@@ -522,7 +580,7 @@
 
   .support-card__note {
     font-size: var(--fs-body-xxs);
-    line-height: var(--lh-paragraph-small);
+    line-height: var(--lh-body-xxs);
   }
 }
 

@@ -3,45 +3,52 @@
    Resets, self-hosted fonts, layout primitives.
    ============================================================ */
 
+/* Font-weight values here are hardcoded numbers, not var(--weight-*) —
+   custom properties don't reliably resolve inside @font-face descriptors
+   (it isn't tied to an element, so there's no cascade for var() to read
+   from). Using the tokens here silently collapsed Book/Medium/SemiBold
+   to the same "normal" (400) weight, losing three distinct faces. Keep
+   these numbers in sync with tokens.css --weight-book/medium/semibold by
+   hand if those ever change. */
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton Book.otf") format("opentype");
-  font-weight: var(--weight-book);
+  font-weight: 475;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton Book Italic.otf") format("opentype");
-  font-weight: var(--weight-book);
+  font-weight: 475;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton Medium.otf") format("opentype");
-  font-weight: var(--weight-medium);
+  font-weight: 550;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton Medium Italic.otf") format("opentype");
-  font-weight: var(--weight-medium);
+  font-weight: 550;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton SemiBold.otf") format("opentype");
-  font-weight: var(--weight-semibold);
+  font-weight: 625;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton SemiBold Italic.otf") format("opentype");
-  font-weight: var(--weight-semibold);
+  font-weight: 625;
   font-style: italic;
   font-display: swap;
 }
@@ -69,7 +76,7 @@
 @font-face {
   font-family: "Peperoncino Sans";
   src: url("./fonts/peperoncino-sans/Peperoncino Sans Regular.otf") format("opentype");
-  font-weight: var(--weight-regular);
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }

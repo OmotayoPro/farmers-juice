@@ -5,6 +5,14 @@
   <div class="page-container">
     <div class="pdp-hero__grid">
 
+      <!-- Desktop only: gallery + navbtn + call form one independent flex column
+           (Figma carousel-contact-div, 2191:4517) so buybox's height — which
+           spans the whole right column — can't inflate their row-tracks. On
+           mobile this wrapper is display:contents and each child goes back to
+           being its own grid area, since mobile's call-badge sits at the very
+           bottom, after buybox, not next to navbtn. -->
+      <div class="pdp-hero__left-col">
+
       <!-- gallery: {{ product.images }} -->
       <div class="pdp-hero__gallery">
         <div class="gallery" data-gallery>
@@ -47,7 +55,9 @@
         </div>
       </div>
 
-      <!-- menu / nutrition-facts trigger — opens the nutrition modal (built in a later section) -->
+      <!-- menu / nutrition-facts trigger — opens the nutrition modal (built in a later section).
+           Desktop (Figma hero-menu-contact, 2191:4533): fixed 513px wide, flush with
+           the main viewer (88px = rail + gap), 359px button centered inside. -->
       <div class="pdp-hero__navbtn">
         <button type="button" class="nutrition-trigger" data-nutrition-trigger>
           <span>View menu and nutrition facts</span>
@@ -55,7 +65,8 @@
         </button>
       </div>
 
-      <!-- customer-support call-out -->
+      <!-- customer-support call-out. Desktop: same 513px/88px-offset zone as the
+           nutrition trigger above it, 359px card centered inside. -->
       <div class="pdp-hero__call">
         <div class="support-card">
           <span class="support-card__icon">
@@ -68,6 +79,9 @@
           </div>
         </div>
       </div>
+
+      </div>
+      <!-- /.pdp-hero__left-col -->
 
       <!-- category select box — {{ product.title }}. Visual only: opens to reveal other
            products but does not navigate (only Greens exists in this build). -->
