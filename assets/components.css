@@ -257,7 +257,9 @@
 .pdp-hero__gallery  { grid-area: gallery; }
 .pdp-hero__navbtn   { grid-area: navbtn; }
 .pdp-hero__call     { grid-area: call; }
-.pdp-hero__dropdown { grid-area: dropdown; }
+/* Sits above the sticky gallery column and the buy box so the open options
+   panel overlays them rather than being painted under. */
+.pdp-hero__dropdown { grid-area: dropdown; position: relative; z-index: 10; }
 .pdp-hero__buybox   { grid-area: buybox; display: flex; flex-direction: column; gap: var(--space-4); }
 
 /* ---- Gallery ---- */
@@ -585,16 +587,24 @@
 }
 
 /* ---- Select box (category dropdown / product title) ---- */
+/* Positioning context for the options panel, which overlays rather than
+   pushes the buy box below it. */
+.select-box {
+  position: relative;
+}
+
 .select-box__trigger {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   text-align: left;
   padding: var(--space-3) var(--space-4);
   border: 2px solid var(--color-border-primary);
   border-radius: var(--radius-sm);
-  background: var(--color-white);
+  /* Figma 2186:200 — the closed trigger has no fill; it sits on whatever
+     the hero background is, it is not a white card. */
+  background: transparent;
 }
 
 .select-box__label {
@@ -633,30 +643,76 @@
   transform: rotate(180deg);
 }
 
+/* Absolutely positioned so opening the dropdown overlays the content beneath
+   it instead of reflowing the buy box. z-index clears the sticky gallery
+   column, which paints in the positioned layer at z-index auto. */
 .select-box__panel {
-  margin-top: var(--space-2);
-  border: 1px solid var(--color-border-light);
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + var(--space-2));
+  z-index: 20;
+  border: 2px solid var(--color-border-primary);
   border-radius: var(--radius-sm);
   overflow: hidden;
+  background: var(--color-white);
 }
 
 .select-box__option {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
   text-align: left;
-  padding: var(--space-3) var(--space-4);
-  font-family: var(--font-body);
-  font-weight: var(--weight-medium);
-  font-size: var(--fs-body-medium);
-  line-height: var(--lh-body-medium);
+  padding: var(--space-4);
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: var(--fs-heading-h6);
+  line-height: var(--lh-heading-h6);
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  background: var(--box-surface, var(--color-white));
+  transition: box-shadow 0.15s ease;
 }
 
-.select-box__option.is-selected {
-  background: var(--color-surface-selected-glow);
+/* Category surface per option — token lookup, no inline colours. */
+.select-box__option[data-box="greens"]      { --box-surface: var(--color-cat-greens); }
+.select-box__option[data-box="fiber"]       { --box-surface: var(--color-cat-fiber); }
+.select-box__option[data-box="variety"]     { --box-surface: var(--color-cat-variety); }
+.select-box__option[data-box="build"]       { --box-surface: var(--color-cat-build); }
+.select-box__option[data-box="smoothie"]    { --box-surface: var(--color-cat-smoothie); }
+.select-box__option[data-box="electrolyte"] { --box-surface: var(--color-cat-electrolyte); }
+.select-box__option[data-box="cleanse"]     { --box-surface: var(--color-cat-cleanse); }
+
+.select-box__option:hover,
+.select-box__option:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-border-primary);
+  outline: none;
+}
+
+.select-box__check {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  opacity: 0;
+}
+
+.select-box__option.is-selected .select-box__check {
+  opacity: 1;
 }
 
 @media (min-width: 1025px) {
   .select-box__trigger {
     padding: var(--space-4) var(--space-6);
+  }
+
+  .select-box__option {
+    padding: var(--space-5) var(--space-6);
+  }
+
+  .select-box__check {
+    width: 28px;
+    height: 28px;
   }
 
   .select-box__label {

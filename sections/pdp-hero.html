@@ -94,8 +94,52 @@
               <img src="/assets/icons/chevron-down.svg" alt="" aria-hidden="true" class="select-box__chevron" />
             </span>
           </button>
+          <!-- Options overlay the content below (absolutely positioned) so opening
+               the panel never reflows the buy box. Each option carries a
+               data-box category that maps to its surface colour token. -->
           <ul class="select-box__panel" id="product-select-panel" data-dropdown-panel hidden>
-            <li><button type="button" class="select-box__option is-selected" aria-current="true">Greens Only Box (Low Sugar)</button></li>
+            <li>
+              <button type="button" class="select-box__option is-selected" data-dropdown-option data-box="greens" aria-current="true">
+                <span class="select-box__option-label">Daily Greens Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="fiber">
+                <span class="select-box__option-label">Gut Fiber Shot Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="variety">
+                <span class="select-box__option-label">Variety Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="build">
+                <span class="select-box__option-label">Build a Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="smoothie">
+                <span class="select-box__option-label">Daily Smoothie Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="electrolyte">
+                <span class="select-box__option-label">Electrolytes &amp; Juices</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="cleanse">
+                <span class="select-box__option-label">Juice Cleanse Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
           </ul>
         </div>
       </div>

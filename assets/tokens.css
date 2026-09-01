@@ -44,6 +44,19 @@
   --color-white:                #ffffff;  /* Surface/White, Primary/White */
   --color-surface-neutral-light:#f5f5f5;  /* Surface/Neutral Light */
 
+  /* ---- Box-category surfaces (select-box dropdown options).
+     Not Figma variables — the open dropdown isn't in the Figma file yet, so
+     these are matched to the category art already used by the juice cards
+     below the fold (--card-from/--card-to in sections/product-grid.html).
+     Replace with the real variables once the open state is designed. ---- */
+  --color-cat-greens:      #b4db8e;  /* = Primary/Green */
+  --color-cat-fiber:       #faaf92;
+  --color-cat-variety:     #fb9b2a;
+  --color-cat-build:       #a98ae0;
+  --color-cat-smoothie:    #f7a53a;
+  --color-cat-electrolyte: #b4db8e;
+  --color-cat-cleanse:     #ffe37a;
+
   /* ---- Borders ---- */
   --color-border-primary:       #303338;  /* Border/primary */
   --color-border-dark:          #bfc0c1;  /* Border/Dark */

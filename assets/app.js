@@ -74,6 +74,24 @@ function initSelectBox(root) {
     isOpen ? close() : open();
   });
 
+  /* Visual only, per CLAUDE.md: picking a box moves the selection and updates
+     the trigger label, but never navigates — this is the only product page. */
+  const valueEl = root.querySelector(".select-box__value");
+  const options = Array.from(panel.querySelectorAll("[data-dropdown-option]"));
+  options.forEach((option) => {
+    option.addEventListener("click", () => {
+      options.forEach((o) => {
+        const isSelected = o === option;
+        o.classList.toggle("is-selected", isSelected);
+        isSelected ? o.setAttribute("aria-current", "true") : o.removeAttribute("aria-current");
+      });
+      const label = option.querySelector(".select-box__option-label");
+      if (valueEl && label) valueEl.textContent = label.textContent;
+      close();
+      trigger.focus();
+    });
+  });
+
   document.addEventListener("click", (event) => {
     if (trigger.contains(event.target) || panel.contains(event.target)) return;
     close();
