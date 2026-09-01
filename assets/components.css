@@ -1391,32 +1391,43 @@
    dark scrim, so title/close use white and each pill/image carries its
    own background.
    ============================================================ */
+/* The overlay itself scrolls, not the modal — that puts the scrollbar against
+   the edge of the screen instead of 128px inside it, on the modal's own box. */
 .nutrition-overlay {
+  /* Modal's outer width at desktop: Figma's 1168px grid + its 16px gutters.
+     Shared with the close buttons so they sit on the modal's right edge. */
+  --nutrition-modal-max: 1200px;
   position: fixed;
   inset: 0;
   z-index: 100;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .nutrition-overlay[hidden] {
   display: none;
 }
 
+/* Fixed, not absolute: the overlay is now a scroll container, so an absolute
+   backdrop would only cover the first viewport and clicks past it would miss. */
 .nutrition-overlay__backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
+/* fit-content so the modal's box hugs its content: everything to the left and
+   right of it is backdrop, and a click there closes rather than landing on an
+   invisible full-width modal box. */
 .nutrition-modal {
   position: relative;
   z-index: 1;
-  max-width: var(--container-content);
+  width: fit-content;
+  max-width: 100%;
   margin-inline: auto;
   margin-block: var(--space-16) var(--space-8);
-  max-height: calc(100svh - var(--space-16) - var(--space-8));
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1431,18 +1442,41 @@
   pointer-events: none;
 }
 
-.nutrition-modal__close {
-  position: absolute;
-  top: var(--space-2);
-  right: var(--space-2);
+/* Both closes share one fixed position so the X doesn't jump when the expanded
+   view opens on top of the modal. Fixed rather than absolute because the modal
+   scrolls inside the overlay while the zoom layer doesn't — anchoring both to
+   the viewport is the only way they land on the same spot.
+
+   padding:0 is load-bearing. The UA sheet gives buttons `padding: 1px 6px`,
+   and with border-box that left a 24x24 button only 12x22 of content — which
+   is what squashed the X out of square. */
+.nutrition-modal__close,
+.nutrition-zoom__close {
+  position: fixed;
+  top: calc(var(--space-16) + var(--space-2));
+  right: max(var(--space-2), calc((100% - var(--nutrition-modal-max)) / 2 + var(--space-2)));
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 24px;
   height: 24px;
+  padding: 0;
   z-index: 2;
 }
 
-.nutrition-modal__close img {
-  width: 100%;
-  height: 100%;
+.nutrition-modal__close img,
+.nutrition-zoom__close img {
+  width: 24px;
+  height: 24px;
+  max-width: none;
+  flex-shrink: 0;
+}
+
+/* The dimmed modal's blur() would become the containing block for its own
+   fixed close button and drag it off position. It's behind the zoom layer and
+   inert at that point, so drop it out of the box tree entirely. */
+.nutrition-modal.is-dimmed .nutrition-modal__close {
+  display: none;
 }
 
 .nutrition-modal__title {
@@ -1535,8 +1569,25 @@
     line-height: var(--lh-title-small);
   }
 
+  .nutrition-filter img {
+    height: 40px;
+  }
+
+  /* Grid rather than wrapping flex, capped at Figma's 1168px (2186:1477 —
+     4 x 280 + 3 x 16) and centred. As a flex row it only ever fitted 3 per
+     row, because the modal's own scrollbar ate the 16px the 4th needed, and
+     8 items then wrapped 3/3/2 and read as left-aligned. */
+  .nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 280px));
+    justify-content: center;
+    max-width: 1168px;
+    margin-inline: auto;
+  }
+
   .nutrition-grid__item {
-    width: 280px;
+    width: 100%;
+    max-width: none;
   }
 }
 
@@ -1554,11 +1605,13 @@
   display: none;
 }
 
+/* Fills 80% of the viewport height, width following the aspect ratio, capped
+   so it can't run off the sides on a short/wide window. */
 .nutrition-zoom__image {
-  max-width: min(500px, 90vw);
-  max-height: 80svh;
+  height: 80svh;
   width: auto;
-  height: auto;
+  max-width: 92vw;
+  max-height: 80svh;
   object-fit: contain;
   border-radius: var(--radius-md);
 }
@@ -1585,19 +1638,6 @@
   height: 24px;
 }
 
-.nutrition-zoom__close {
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
-  width: 24px;
-  height: 24px;
-}
-
-.nutrition-zoom__close img {
-  width: 100%;
-  height: 100%;
-}
-
 .nutrition-modal__close:focus-visible,
 .nutrition-zoom__back:focus-visible,
 .nutrition-zoom__close:focus-visible {
@@ -1606,15 +1646,11 @@
 }
 
 @media (min-width: 1025px) {
+  /* Mirrors the close button on the opposite edge of the same 1200px column. */
   .nutrition-zoom__back {
-    top: var(--space-8);
-    left: calc((100% - var(--container-content)) / 2 + var(--space-4));
+    top: var(--space-16);
+    left: max(var(--space-4), calc((100% - var(--nutrition-modal-max)) / 2 + var(--space-2)));
     font-size: var(--fs-heading-h5);
-  }
-
-  .nutrition-zoom__close {
-    top: calc(50% - 292px);
-    right: calc((100% - var(--container-content)) / 2 + var(--space-4));
   }
 }
 

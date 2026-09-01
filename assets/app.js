@@ -169,6 +169,8 @@ function initNutritionModal() {
   const modalCloseBtn = overlay.querySelector("[data-nutrition-close]");
   const zoomCloseBtn = overlay.querySelector("[data-nutrition-close-zoom]");
   const backBtn = overlay.querySelector("[data-nutrition-back]");
+  const grid = overlay.querySelector("[data-nutrition-grid]");
+  const filters = overlay.querySelector("[data-nutrition-filters]");
   const images = Array.from(overlay.querySelectorAll("[data-nutrition-image]"));
   const filterButtons = Array.from(overlay.querySelectorAll("[data-nutrition-filter]"));
 
@@ -235,6 +237,25 @@ function initNutritionModal() {
   zoomCloseBtn.addEventListener("click", popOneLevel);
   backBtn.addEventListener("click", popOneLevel);
   backdrop.addEventListener("click", popOneLevel);
+
+  /* Clicking the empty space around the enlarged image steps back to the
+     modal, the same way clicking the backdrop closes it. Only fires when the
+     target is the zoom layer itself — the image and its buttons are children,
+     so clicks on them don't reach here. The zoom sits above the backdrop, so
+     it needs its own handler. */
+  zoom.addEventListener("click", (event) => {
+    if (event.target === zoom) popOneLevel();
+  });
+
+  /* Same idea one level up. The backdrop only covers what's outside the modal's
+     box, which on a wide screen is a thin strip — so a click landing on the
+     modal's own padding, the gaps between grid items, or the space around the
+     filter pills has to close too. Comparing against the containers means
+     clicks on a pill, an image, the title or the close button are unaffected. */
+  const modalDeadZones = [modal, grid, filters];
+  modal.addEventListener("click", (event) => {
+    if (modalDeadZones.includes(event.target)) popOneLevel();
+  });
 
   document.addEventListener("keydown", (event) => {
     if (!isOpen()) return;
