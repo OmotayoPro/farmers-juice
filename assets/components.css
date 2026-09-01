@@ -184,10 +184,33 @@
 }
 
 /* ---- Section shell ---- */
+/* White, not a gradient: the green and its fade now come from the bg-art SVG,
+   whose own bottom edge is solid white edge-to-edge — so the art hands off to
+   this with no seam however tall the hero grows. */
 .pdp-hero {
   position: relative;
-  background: linear-gradient(180deg, var(--color-surface-light-green) 0%, var(--color-white) 60%);
+  background: var(--color-white);
   padding-block-end: var(--space-16);
+}
+
+/* Mobile shows the artwork cropped rather than shrunk (Figma 2186:1805 places
+   it at native scale, offset left) — `cover` on a 649px band reproduces that
+   and still includes the full vertical range, so the white wave at the bottom
+   of the SVG lands on the band's bottom edge. */
+.pdp-hero__bg {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 649px;
+  background: url("/images/hero/bg-art.svg") no-repeat 36% top / cover;
+  pointer-events: none;
+}
+
+/* The art is the only positioned element in the hero, so the content needs a
+   stacking position of its own to sit on top of it. */
+.pdp-hero .page-container {
+  position: relative;
+  z-index: 1;
 }
 
 .pdp-hero__grid {
@@ -211,6 +234,16 @@
 }
 
 @media (min-width: 1025px) {
+  /* Full width at the artwork's own 1440:1105 ratio, top-aligned — matching
+     bg-art's placement in the hero frame. Height follows width, so it scales
+     with the viewport instead of being pinned to 1105px. */
+  .pdp-hero__bg {
+    height: auto;
+    aspect-ratio: 1440 / 1105;
+    background-position: top center;
+    background-size: 100% 100%;
+  }
+
   .pdp-hero__grid {
     /* Two equal fluid columns, not a fixed 601px gallery (Figma 2206:7416 —
        both children are flex-[1_0_0]). With the container capped at 1280 this
@@ -1727,15 +1760,18 @@
   display: none;
 }
 
+/* Mobile is a horizontal row card (Figma 2186:3729): 104x150 image on the
+   left, copy on the right. Desktop stacks it — see the media query below. */
 .juice-card__body {
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 164px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--space-8);
+  gap: var(--space-2);
+  padding: 7px var(--space-4);
   cursor: default;
 }
 
@@ -1743,8 +1779,8 @@
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
 }
 
 .juice-card__badge {
@@ -1768,27 +1804,41 @@
   background: var(--color-turquoise);
 }
 
+/* No padding on the container. Figma centres a 142px image inside the card's
+   full inner width — the "px-[57px]" the exporter reports is that centring
+   expressed as padding for one 256px-wide card, not a real inset. Applying it
+   as literal padding starved the content box to 109px; the global
+   `img { max-width: 100% }` then clamped the image to that width while
+   `object-fit: cover` held the height at 204px, cropping 33px off the sides. */
 .juice-card__image-wrap {
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-inline: var(--space-14);
+  flex-shrink: 0;
 }
 
+/* Mobile image box, 2186:3730. `contain` so it can never crop, whatever the
+   source asset's ratio. */
 .juice-card__image-wrap img {
-  height: 204px;
-  width: auto;
-  object-fit: cover;
+  width: 104px;
+  height: 150px;
+  object-fit: contain;
 }
 
 .juice-card__content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
-  text-align: center;
-  width: 100%;
+  align-items: flex-start;
+  /* Title and plant-count sit flush (Figma 2186:3732); only the ingredients
+     get the 4px, so the gap lives on that element rather than here. */
+  gap: 0;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+}
+
+.juice-card__ingredients {
+  margin-block-start: var(--space-1);
 }
 
 .juice-card__content h3 {
@@ -1811,8 +1861,8 @@
 .juice-card__ingredients {
   font-family: var(--font-body);
   font-weight: var(--weight-book);
-  font-size: var(--fs-body-medium);
-  line-height: var(--lh-body-medium);
+  font-size: var(--fs-body-small);
+  line-height: var(--lh-body-small);
   color: var(--color-text-primary);
 }
 
@@ -1831,46 +1881,109 @@
     grid-template-columns: repeat(5, 1fr);
   }
 
+  /* Desktop stacks: image above copy (Figma 2186:3903). The 8px is the gap
+     between the image container and the content block (204 -> 212). */
   .juice-card__body {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 0;
     padding: var(--space-4) var(--space-8);
+  }
+
+  .juice-card__image-wrap {
+    width: 100%;
+  }
+
+  /* 142x204 at full size, shrinking proportionally once the card gets narrower
+     than that — `contain` keeps it letterboxed rather than cropped. */
+  .juice-card__image-wrap img {
+    width: 100%;
+    max-width: 142px;
+    height: auto;
+    aspect-ratio: 142 / 204;
+  }
+
+  .juice-card__content {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .juice-card__ingredients {
+    font-size: var(--fs-body-medium);
+    line-height: var(--lh-body-medium);
+  }
+
+  .juice-card__seal {
+    width: 40px;
+    height: 40px;
   }
 }
 
 /* ============================================================
    Juice benefits row ("Why try our juices?")
    ============================================================ */
+/* Four nested levels, each with its own gap — mobile 2186:2260, desktop
+   2186:4233. They are deliberately different at every level, so none of them
+   inherit from a shared value:
+
+                     mobile   desktop
+     title -> row      8px      16px
+     item -> item      8px      40px
+     icon -> copy     16px      16px
+     heading -> text   4px       0
+
+   The 0 at the innermost level is what keeps a benefit's two text lines
+   reading as one block rather than two. */
 .juice-benefits {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-2);
   padding-block: var(--space-16);
 }
 
 .juice-benefits__title {
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
-  font-size: var(--fs-heading-h4);
-  line-height: var(--lh-heading-h4);
+  font-size: var(--fs-heading-h5);
+  line-height: var(--lh-heading-h5);
   text-transform: uppercase;
   text-align: center;
   color: var(--color-text-emphasis);
 }
 
+/* Centred flex row, not a stretched grid: in Figma each item is only as wide
+   as its own copy and the row is centred as a unit (2186:4235). */
 .juice-benefits__row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
   width: 100%;
-  max-width: 500px;
 }
 
 .benefit-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--space-4);
+  /* Basis, so three fit a 349px row at the 402 frame but can still shrink on
+     a narrower phone rather than overflowing. */
+  flex: 0 1 111px;
+  min-width: 0;
   text-align: center;
+}
+
+.benefit-item__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
 }
 
 .benefit-item.is-desktop-only {
@@ -1894,37 +2007,66 @@
   overflow: hidden;
 }
 
+/* ~84% of the disc, matching how the artwork is inset inside the 104px circle
+   in Figma (87.6 / 104). */
 .benefit-item__icon img {
-  width: 68%;
-  height: 68%;
+  width: 84%;
+  height: 84%;
   object-fit: contain;
 }
 
 .benefit-item__title {
   font-family: var(--font-body);
   font-weight: var(--weight-semibold);
-  font-size: var(--fs-body-large);
-  line-height: 26px;
+  font-size: var(--fs-body-small);
+  line-height: var(--lh-body-small);
   color: var(--color-text-emphasis);
 }
 
-.benefit-item__copy {
+.benefit-item__text {
   font-family: var(--font-body);
-  font-weight: var(--weight-medium);
-  font-size: var(--fs-body-medium);
-  line-height: var(--lh-body-medium);
+  font-weight: var(--weight-book);
+  font-size: var(--fs-body-xxs);
+  line-height: var(--lh-body-xxs);
   color: var(--color-text-primary);
 }
 
 @media (min-width: 1025px) {
+  .juice-benefits {
+    gap: var(--space-4);
+  }
+
+  .juice-benefits__title {
+    font-size: var(--fs-heading-h3);
+    line-height: var(--lh-heading-h3);
+  }
+
   .juice-benefits__row {
-    grid-template-columns: repeat(4, 1fr);
-    max-width: none;
+    align-items: flex-start;
     gap: var(--space-10);
+  }
+
+  .benefit-item {
+    flex: 0 0 auto;
+  }
+
+  .benefit-item__copy {
+    gap: 0;
   }
 
   .benefit-item__icon {
     width: 104px;
     height: 104px;
+  }
+
+  .benefit-item__title {
+    font-size: var(--fs-body-large);
+    line-height: var(--lh-paragraph-medium-tight);
+  }
+
+  .benefit-item__text {
+    font-weight: var(--weight-medium);
+    font-size: var(--fs-body-medium);
+    line-height: var(--lh-body-medium);
   }
 }
