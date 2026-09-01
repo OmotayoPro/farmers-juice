@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && mkdir -p dist/assets/icons && cp -R assets/icons/. dist/assets/icons/",
     "preview": "vite preview"
   },
   "devDependencies": {
