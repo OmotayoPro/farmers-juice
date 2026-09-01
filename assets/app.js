@@ -116,13 +116,23 @@ function initOptionGroups(root) {
   });
 }
 
-function initSubscriptionToggle(root) {
-  const row = root.querySelector("[data-subscription-trigger]");
-  if (!row) return;
-  row.addEventListener("click", () => {
-    const isOpen = row.getAttribute("aria-expanded") === "true";
-    row.setAttribute("aria-expanded", isOpen ? "false" : "true");
-  });
+/* A <select> is as wide as its widest option, which would strand the chevron
+   whenever a shorter one is picked. Measure the current label in a hidden twin
+   and size the select to it so the chevron stays tucked against the value. */
+function initSubscriptionSelect(root) {
+  const select = root.querySelector("[data-subscription-select]");
+  const sizer = root.querySelector("[data-subscription-sizer]");
+  if (!select || !sizer) return;
+
+  function fit() {
+    sizer.textContent = select.options[select.selectedIndex].textContent;
+    select.style.width = `${Math.ceil(sizer.getBoundingClientRect().width)}px`;
+  }
+
+  select.addEventListener("change", fit);
+  // Campton loads async; a width measured against the fallback would be wrong.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  fit();
 }
 
 /* ---- Nutrition-facts modal: closed -> modal open -> zoom open.
@@ -280,7 +290,7 @@ function initPdpHero(nutritionModal) {
   initGallery(root);
   initSelectBox(root);
   initOptionGroups(root);
-  initSubscriptionToggle(root);
+  initSubscriptionSelect(root);
   initNutritionTrigger(root, nutritionModal);
 }
 

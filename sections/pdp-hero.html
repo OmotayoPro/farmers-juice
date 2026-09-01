@@ -100,7 +100,7 @@
           <ul class="select-box__panel" id="product-select-panel" data-dropdown-panel hidden>
             <li>
               <button type="button" class="select-box__option is-selected" data-dropdown-option data-box="greens" aria-current="true">
-                <span class="select-box__option-label">Daily Greens Box</span>
+                <span class="select-box__option-label">Greens Only Box (Low Sugar)</span>
                 <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
               </button>
             </li>
@@ -147,6 +147,11 @@
       <!-- buy box: rating, badges, options, subscription, price, CTAs -->
       <div class="pdp-hero__buybox">
 
+        <!-- Figma "Frame 39486" (2186:207): rating + checkmarks + badges are one
+             8px-gapped stack, tighter than the 16px the buy box uses between its
+             larger groups. -->
+        <div class="highlights">
+
         <div class="rating">
           <span class="rating__value">4.9</span>
           <span class="rating__stars" aria-hidden="true">
@@ -171,16 +176,22 @@
           <li>Ships in 1 business day</li>
         </ul>
 
+        <!-- Icon wrappers are the Figma "Frame 39468" containers (2186:231 / 2186:235,
+             mobile 2186:1880): 56px (32px mobile) rounded discs with their own fill.
+             The USDA seal has no container — its artwork carries its own ground. -->
         <ul class="badges is-desktop-only">
-          <li><img src="/assets/icons/gut-pounds.png" alt="" /><span>1.5 pounds<br />plants per juice</span></li>
-          <li><img src="/assets/icons/gut-support.png" alt="" /><span>Daily gut<br />support</span></li>
+          <li><span class="badges__icon badges__icon--white"><img src="/assets/icons/gut-pounds.png" alt="" /></span><span>1.5 pounds<br />plants per juice</span></li>
+          <li><span class="badges__icon badges__icon--glow"><img src="/assets/icons/gut-support.png" alt="" /></span><span>Daily gut<br />support</span></li>
           <li><img src="/assets/icons/usda-badge.svg" alt="USDA Organic" /><span>No glyphosate<br />allowed</span></li>
         </ul>
         <ul class="badges is-mobile-only">
           <li><img src="/assets/icons/heart.png" alt="" /><span>family<br />owned</span></li>
           <li><img src="/assets/icons/usda-badge.svg" alt="USDA Organic" /><span>no glyphosate<br />allowed</span></li>
-          <li><img src="/assets/icons/gut-support.png" alt="" /><span>Daily gut<br />support</span></li>
+          <li><span class="badges__icon badges__icon--light-green"><img src="/assets/icons/gut-support.png" alt="" /></span><span>Daily gut<br />support</span></li>
         </ul>
+
+        </div>
+        <!-- /.highlights -->
 
         <div class="option-group" data-option-group>
           <p class="option-group__label">1. Select type</p>
@@ -212,11 +223,25 @@
           </div>
         </div>
 
+        <!-- Delivery frequency is a real <select>: native menu, keyboard and
+             screen-reader support for free. The label wraps it so the chevron
+             is part of the hit area; the sizer span (measured in app.js) keeps
+             the chevron tucked against the current value instead of against the
+             widest option. -->
         <div class="subscription">
-          <button type="button" class="subscription__row" data-subscription-trigger aria-expanded="false">
-            <span>Delivery every <span class="subscription__value">21 Days Save (15%)</span></span>
-            <img src="/assets/icons/chevron-down.svg" alt="" aria-hidden="true" />
-          </button>
+          <div class="subscription__row">
+            <span class="subscription__prefix">Delivery every</span>
+            <label class="subscription__field">
+              <select class="subscription__select" data-subscription-select aria-label="Delivery frequency">
+                <option value="14">14 Days Save (15%)</option>
+                <option value="21" selected>21 Days Save (15%)</option>
+                <option value="28">28 Days Save (15%)</option>
+                <option value="single">Single Purchase</option>
+              </select>
+              <span class="subscription__sizer" data-subscription-sizer aria-hidden="true"></span>
+              <img class="subscription__chevron" src="/assets/icons/chevron-down.svg" alt="" aria-hidden="true" />
+            </label>
+          </div>
           <p class="subscription__note">(Pause or Cancel anytime)</p>
         </div>
 

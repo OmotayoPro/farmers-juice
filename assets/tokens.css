@@ -133,6 +133,7 @@
      Radii & spacing (observed from the design; not Figma variables,
      so treated as build conventions — adjust against rendered frames)
      ============================================================ */
+  --radius-xs:  6px;
   --radius-sm:  8px;
   --radius-md:  16px;
   --radius-lg:  20px;
@@ -151,7 +152,7 @@
   --space-16: 64px;
 
   /* ---- Component-specific one-offs (not on the 8pt scale, observed from the hero frame) ---- */
-  --hero-column-gap: 80px;          /* gap between gallery and buy-box columns, desktop */
+  --hero-column-gap: 40px;          /* gap between gallery and buy-box columns, desktop (2206:7416) */
   --hero-block-start-desktop: 128px; /* hero top inner padding, desktop (measured 127px) */
   --hero-block-start-mobile: 80px;   /* hero top inner padding, mobile */
 

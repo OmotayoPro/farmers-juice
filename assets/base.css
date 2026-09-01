@@ -105,12 +105,17 @@ img {
   max-width: 100%;
 }
 
-button {
+button,
+select {
   font: inherit;
   color: inherit;
   background: none;
   border: none;
   cursor: pointer;
+  /* The `font` shorthand doesn't carry letter-spacing, and the UA sheet forces
+     `normal` on form controls — so every button rendered ~1% wider than the
+     design, which is drawn with the global -1% tracking. */
+  letter-spacing: inherit;
 }
 
 a {
@@ -159,13 +164,11 @@ body.no-scroll {
   }
 }
 
-/* The hero is full-bleed in the design (bg-art runs edge to edge). Its own
-   content uses a flat 80px side padding rather than the narrower
-   --container-content gutter used by below-fold sections. */
-.pdp-hero .page-container {
-  max-width: none;
-}
-
+/* The hero's background art is full-bleed, but its content is not: it stays in
+   the shared 1280px container, centered, so it stops growing on wide screens
+   (Figma 2206:7412 — the hero frame is w-[1280px] with px-[80px]). The only
+   difference from the default container is the flat 80px gutter, wider than
+   the --container-content gutter the below-fold sections use. */
 @media (min-width: 1025px) {
   .pdp-hero .page-container {
     padding-inline: 80px;
