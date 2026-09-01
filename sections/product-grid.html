@@ -3,191 +3,460 @@
      Card data mirrors content/juices.json. Filtering is real: clicking a tab
      re-filters the grid against each card's data-categories. -->
 <section class="product-grid-section" data-section="product-grid">
+	<div
+		class="grid-filters"
+		data-grid-filters
+		role="group"
+		aria-label="Filter juices by category"
+	>
+		<button
+			type="button"
+			class="grid-filter is-selected"
+			data-grid-filter="green-juices"
+		>
+			<span>Green Juices</span>
+			<img
+				src="/assets/icons/filter-green-juices.png"
+				alt=""
+				aria-hidden="true"
+			/>
+		</button>
+		<button type="button" class="grid-filter" data-grid-filter="fiber">
+			<span>Fiber</span>
+			<img src="/assets/icons/filter-fiber.png" alt="" aria-hidden="true" />
+		</button>
+		<button type="button" class="grid-filter" data-grid-filter="immunity">
+			<span>Immunity</span>
+			<img src="/assets/icons/filter-immunity.png" alt="" aria-hidden="true" />
+		</button>
+		<button type="button" class="grid-filter" data-grid-filter="smoothies">
+			<span>Smoothies</span>
+			<img src="/assets/icons/filter-smoothies.png" alt="" aria-hidden="true" />
+		</button>
+		<button type="button" class="grid-filter" data-grid-filter="electrolytes">
+			<span>Electrolytes</span>
+			<img
+				src="/assets/icons/filter-electrolytes.png"
+				alt=""
+				aria-hidden="true"
+			/>
+		</button>
+		<button type="button" class="grid-filter" data-grid-filter="shots">
+			<span>Shots</span>
+			<img src="/assets/icons/filter-shots.png" alt="" aria-hidden="true" />
+		</button>
+	</div>
 
-    <div class="grid-filters" data-grid-filters role="group" aria-label="Filter juices by category">
-      <button type="button" class="grid-filter is-selected" data-grid-filter="green-juices">
-        <span>Green Juices</span>
-        <img src="/assets/icons/filter-green-juices.png" alt="" aria-hidden="true" />
-      </button>
-      <button type="button" class="grid-filter" data-grid-filter="fiber">
-        <span>Fiber</span>
-        <img src="/assets/icons/filter-fiber.png" alt="" aria-hidden="true" />
-      </button>
-      <button type="button" class="grid-filter" data-grid-filter="immunity">
-        <span>Immunity</span>
-        <img src="/assets/icons/filter-immunity.png" alt="" aria-hidden="true" />
-      </button>
-      <button type="button" class="grid-filter" data-grid-filter="smoothies">
-        <span>Smoothies</span>
-        <img src="/assets/icons/filter-smoothies.png" alt="" aria-hidden="true" />
-      </button>
-      <button type="button" class="grid-filter" data-grid-filter="electrolytes">
-        <span>Electrolytes</span>
-        <img src="/assets/icons/filter-electrolytes.png" alt="" aria-hidden="true" />
-      </button>
-      <button type="button" class="grid-filter" data-grid-filter="shots">
-        <span>Shots</span>
-        <img src="/assets/icons/filter-shots.png" alt="" aria-hidden="true" />
-      </button>
-    </div>
+	<div class="juice-grid" data-juice-grid>
+		<article
+			class="juice-card"
+			data-categories="green-juices"
+			style="--card-from: #fdd8c4; --card-to: #faaf92"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/digestive-greens.png"
+						alt="Digestive Greens bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Digestive Greens</h3>
+					<p class="juice-card__plants">12 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Celery, Fennel, Romaine Lettuce, Lemon, Parsley, Green
+						Cabbage, Mint, Ginger, Apple Cider Vinegar, Turmeric, Basil
+					</p>
+				</div>
+			</button>
+		</article>
 
-    <div class="juice-grid" data-juice-grid>
+		<article
+			class="juice-card"
+			data-categories="green-juices"
+			style="--card-from: #dbefc1; --card-to: #b4db8e"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<span class="juice-card__badge">NEW</span>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/gut-cleanse-greens.png"
+						alt="Gut Cleanse Greens bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Gut Cleanse Greens</h3>
+					<p class="juice-card__plants">10 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Jicama, Fennel, Ginger Tea, Lemon, Pineapple, Guar Fiber,
+						Ginger, Turmeric, Wheat Grass Powder
+					</p>
+				</div>
+			</button>
+		</article>
 
-      <article class="juice-card" data-categories="green-juices" style="--card-from:#fdd8c4;--card-to:#faaf92;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/digestive-greens.png" alt="Digestive Greens bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Digestive Greens</h3>
-            <p class="juice-card__plants">12 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Celery, Fennel, Romaine Lettuce, Lemon, Parsley, Green Cabbage, Mint, Ginger, Apple Cider Vinegar, Turmeric, Basil</p>
-          </div>
-        </button>
-      </article>
+		<article
+			class="juice-card"
+			data-categories="green-juices immunity"
+			style="--card-from: #fff3b2; --card-to: #ffe37a"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<span class="juice-card__badge">NEW</span>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/focus-greens.png"
+						alt="Focus Greens bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Focus Greens</h3>
+					<p class="juice-card__plants">11 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Jicama, Fennel, Lemon, Mint Tea (Water, Mint), Mint,
+						Basil, Peach, Turmeric, Ginger, Coffee Berry Extract
+					</p>
+				</div>
+			</button>
+		</article>
 
-      <article class="juice-card" data-categories="green-juices" style="--card-from:#dbefc1;--card-to:#b4db8e;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <span class="juice-card__badge">NEW</span>
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/gut-cleanse-greens.png" alt="Gut Cleanse Greens bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Gut Cleanse Greens</h3>
-            <p class="juice-card__plants">10 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Jicama, Fennel, Ginger Tea, Lemon, Pineapple, Guar Fiber, Ginger, Turmeric, Wheat Grass Powder</p>
-          </div>
-        </button>
-      </article>
+		<article
+			class="juice-card"
+			data-categories="green-juices smoothies"
+			style="--card-from: #fdcb54; --card-to: #fb9b2a"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<span class="juice-card__badge">NEW</span>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/calming-greens.png"
+						alt="Calming Greens bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Calming Greens</h3>
+					<p class="juice-card__plants">8 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Spinach, Jicama, Chamomile Tea (Water Chamomile), Apple,
+						Lemon, Basil, Sunfiber (Guar Fiber), Suntheanine (L-theanine)
+					</p>
+				</div>
+			</button>
+		</article>
 
-      <article class="juice-card" data-categories="green-juices immunity" style="--card-from:#fff3b2;--card-to:#ffe37a;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <span class="juice-card__badge">NEW</span>
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/focus-greens.png" alt="Focus Greens bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Focus Greens</h3>
-            <p class="juice-card__plants">11 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Jicama, Fennel, Lemon, Mint Tea (Water, Mint), Mint, Basil, Peach, Turmeric, Ginger, Coffee Berry Extract</p>
-          </div>
-        </button>
-      </article>
+		<article
+			class="juice-card"
+			data-categories="green-juices electrolytes"
+			style="--card-from: #dbefc1; --card-to: #b4db8e"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/electrolyte-greens.png"
+						alt="Electrolyte Greens bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Electrolyte Greens</h3>
+					<p class="juice-card__plants">6 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Watermelon, Spinach, Coconut Water, Lemon, Basil, Pink
+						Himalayan Salt
+					</p>
+				</div>
+			</button>
+		</article>
 
-      <article class="juice-card" data-categories="green-juices smoothies" style="--card-from:#fdcb54;--card-to:#fb9b2a;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <span class="juice-card__badge">NEW</span>
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/calming-greens.png" alt="Calming Greens bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Calming Greens</h3>
-            <p class="juice-card__plants">8 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Spinach, Jicama, Chamomile Tea (Water Chamomile), Apple, Lemon, Basil, Sunfiber (Guar Fiber), Suntheanine (L-theanine)</p>
-          </div>
-        </button>
-      </article>
+		<article
+			class="juice-card"
+			data-categories="green-juices immunity"
+			style="--card-from: #fff3b2; --card-to: #ffe37a"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/green-athlete.png"
+						alt="Green Athlete bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Green Athlete</h3>
+					<p class="juice-card__plants">12 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Celery, Fennel, Basil, Green Cabbage, Mint, Romaine
+						Lettuce, Lemon, Ginger, Maca, Turmeric, Black Pepper
+					</p>
+				</div>
+			</button>
+		</article>
 
-      <article class="juice-card" data-categories="green-juices electrolytes" style="--card-from:#dbefc1;--card-to:#b4db8e;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/electrolyte-greens.png" alt="Electrolyte Greens bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Electrolyte Greens</h3>
-            <p class="juice-card__plants">6 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Watermelon, Spinach, Coconut Water, Lemon, Basil, Pink Himalayan Salt</p>
-          </div>
-        </button>
-      </article>
+		<article
+			class="juice-card"
+			data-categories="green-juices electrolytes"
+			style="--card-from: #fdcb54; --card-to: #fb9b2a"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/hydration-greens.png"
+						alt="Hydration Greens bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Hydration Greens</h3>
+					<p class="juice-card__plants">6 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Watermelon, Spinach, Coconut Water, Lemon, Basil
+					</p>
+				</div>
+			</button>
+		</article>
 
-      <article class="juice-card" data-categories="green-juices immunity" style="--card-from:#fff3b2;--card-to:#ffe37a;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/green-athlete.png" alt="Green Athlete bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Green Athlete</h3>
-            <p class="juice-card__plants">12 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Celery, Fennel, Basil, Green Cabbage, Mint, Romaine Lettuce, Lemon, Ginger, Maca, Turmeric, Black Pepper</p>
-          </div>
-        </button>
-      </article>
+		<article
+			class="juice-card"
+			data-categories="green-juices smoothies"
+			style="--card-from: #fdd8c4; --card-to: #faaf92"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<span class="juice-card__badge juice-card__badge--popular"
+					>POPULAR</span
+				>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/matcha-greens.png"
+						alt="Matcha Greens bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Matcha Greens</h3>
+					<p class="juice-card__plants">10 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Jicama, Spinach, Celery, Lemon, Fennel, Pineapple,
+						Sunfiber (Guar Fiber), Ginger, Matcha Powder
+					</p>
+				</div>
+			</button>
+		</article>
 
-      <article class="juice-card" data-categories="green-juices electrolytes" style="--card-from:#fdcb54;--card-to:#fb9b2a;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/hydration-greens.png" alt="Hydration Greens bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Hydration Greens</h3>
-            <p class="juice-card__plants">6 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Watermelon, Spinach, Coconut Water, Lemon, Basil</p>
-          </div>
-        </button>
-      </article>
+		<article
+			class="juice-card"
+			data-categories="green-juices smoothies"
+			style="--card-from: #dbefc1; --card-to: #b4db8e"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<span class="juice-card__badge juice-card__badge--popular"
+					>POPULAR</span
+				>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/peaceful-greens.png"
+						alt="Peaceful Greens bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Peaceful Greens</h3>
+					<p class="juice-card__plants">11 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Celery, Fennel, Romaine Lettuce, Lemon, Green Cabbage,
+						Ginger, Mint, Turmeric, Basil, Chamomile Flower.
+					</p>
+				</div>
+			</button>
+		</article>
 
-      <article class="juice-card" data-categories="green-juices smoothies" style="--card-from:#fdd8c4;--card-to:#faaf92;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <span class="juice-card__badge juice-card__badge--popular">POPULAR</span>
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/matcha-greens.png" alt="Matcha Greens bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Matcha Greens</h3>
-            <p class="juice-card__plants">10 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Jicama, Spinach, Celery, Lemon, Fennel, Pineapple, Sunfiber (Guar Fiber), Ginger, Matcha Powder</p>
-          </div>
-        </button>
-      </article>
+		<article
+			class="juice-card"
+			data-categories="green-juices immunity"
+			style="--card-from: #fff3b2; --card-to: #ffe37a"
+		>
+			<button
+				type="button"
+				class="juice-card__body"
+				tabindex="-1"
+				aria-disabled="true"
+			>
+				<img
+					class="juice-card__seal"
+					src="/assets/icons/card-seal.svg"
+					alt=""
+					aria-hidden="true"
+				/>
+				<div class="juice-card__image-wrap">
+					<img
+						src="/images/cards/performance-greens.png"
+						alt="Performance Greens bottle with ingredients"
+					/>
+				</div>
+				<div class="juice-card__content">
+					<h3>Performance Greens</h3>
+					<p class="juice-card__plants">12 PLANTS</p>
+					<p class="juice-card__ingredients">
+						Cucumber, Romaine Lettuce, Celery, Fennel, Lemon, Green Cabbage,
+						Ginger, Cilantro, Turmeric, Mint, Basil, Lion's Mane.
+					</p>
+				</div>
+			</button>
+		</article>
+	</div>
 
-      <article class="juice-card" data-categories="green-juices smoothies" style="--card-from:#dbefc1;--card-to:#b4db8e;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <span class="juice-card__badge juice-card__badge--popular">POPULAR</span>
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/peaceful-greens.png" alt="Peaceful Greens bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Peaceful Greens</h3>
-            <p class="juice-card__plants">11 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Celery, Fennel, Romaine Lettuce, Lemon, Green Cabbage, Ginger, Mint, Turmeric, Basil, Chamomile Flower.</p>
-          </div>
-        </button>
-      </article>
+	<p class="juice-grid__empty" data-juice-grid-empty hidden>
+		No juices in this category yet — check back soon.
+	</p>
 
-      <article class="juice-card" data-categories="green-juices immunity" style="--card-from:#fff3b2;--card-to:#ffe37a;">
-        <button type="button" class="juice-card__body" tabindex="-1" aria-disabled="true">
-          <img class="juice-card__seal" src="/assets/icons/card-seal.svg" alt="" aria-hidden="true" />
-          <div class="juice-card__image-wrap"><img src="/images/cards/performance-greens.png" alt="Performance Greens bottle with ingredients" /></div>
-          <div class="juice-card__content">
-            <h3>Performance Greens</h3>
-            <p class="juice-card__plants">12 PLANTS</p>
-            <p class="juice-card__ingredients">Cucumber, Romaine Lettuce, Celery, Fennel, Lemon, Green Cabbage, Ginger, Cilantro, Turmeric, Mint, Basil, Lion's Mane.</p>
-          </div>
-        </button>
-      </article>
-
-    </div>
-
-    <p class="juice-grid__empty" data-juice-grid-empty hidden>No juices in this category yet — check back soon.</p>
-
-    <div class="page-container">
-      <div class="juice-benefits">
-        <h2 class="juice-benefits__title">Why try our juices?</h2>
-        <div class="juice-benefits__row">
-          <div class="benefit-item">
-            <span class="benefit-item__icon"><img src="/assets/icons/benefit-gut.png" alt="" aria-hidden="true" /></span>
-            <p class="benefit-item__title">Daily<br />Gut Support</p>
-            <p class="benefit-item__copy">Get more veggies<br />&amp; feel amazing</p>
-          </div>
-          <div class="benefit-item">
-            <span class="benefit-item__icon"><img src="/assets/icons/benefit-skin.png" alt="" aria-hidden="true" /></span>
-            <p class="benefit-item__title">Healthy,<br />Glowing Skin</p>
-            <p class="benefit-item__copy">Hydrating plant nutrition</p>
-          </div>
-          <div class="benefit-item is-desktop-only">
-            <span class="benefit-item__icon"><img src="/assets/icons/benefit-energy.png" alt="" aria-hidden="true" /></span>
-            <p class="benefit-item__title">Feel-Good<br />Energy</p>
-            <p class="benefit-item__copy">Without Coffee<br />or stimulants</p>
-          </div>
-          <div class="benefit-item">
-            <span class="benefit-item__icon"><img src="/assets/icons/benefit-energy.png" alt="" aria-hidden="true" /></span>
-            <p class="benefit-item__title">Maximize<br />Plant Diversity</p>
-            <p class="benefit-item__copy">25 plants in our<br />green juices</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
+	<div class="page-container">
+		<div class="juice-benefits">
+			<h2 class="juice-benefits__title">Why try our juices?</h2>
+			<!-- Each item is icon + a "copy" block (Figma's own node name). The copy
+             block exists so the heading and the sentence under it can keep
+             their own tight spacing — 0 on desktop, 4px on mobile — instead of
+             inheriting the 16px that separates the icon from the text. -->
+			<div class="juice-benefits__row">
+				<div class="benefit-item">
+					<span class="benefit-item__icon"
+						><img src="/assets/icons/benefit-gut.png" alt="" aria-hidden="true"
+					/></span>
+					<div class="benefit-item__copy">
+						<p class="benefit-item__title">Daily<br />Gut Support</p>
+						<p class="benefit-item__text">
+							Get more veggies<br />&amp; feel amazing
+						</p>
+					</div>
+				</div>
+				<div class="benefit-item">
+					<span class="benefit-item__icon"
+						><img
+							src="/assets/icons/benefit-skin.png"
+							alt=""
+							aria-hidden="true"
+					/></span>
+					<div class="benefit-item__copy">
+						<p class="benefit-item__title">Healthy,<br />Glowing Skin</p>
+						<p class="benefit-item__text">Hydrating plant<br />nutrition</p>
+					</div>
+				</div>
+				<div class="benefit-item is-desktop-only">
+					<span class="benefit-item__icon"
+						><img
+							src="/assets/icons/benefit-energy.png"
+							alt=""
+							aria-hidden="true"
+					/></span>
+					<div class="benefit-item__copy">
+						<p class="benefit-item__title">Feel-Good<br />Energy</p>
+						<p class="benefit-item__text">Without Coffee<br />or stimulants</p>
+					</div>
+				</div>
+				<div class="benefit-item">
+					<span class="benefit-item__icon"
+						><img
+							src="/assets/icons/benefit-energy.png"
+							alt=""
+							aria-hidden="true"
+					/></span>
+					<div class="benefit-item__copy">
+						<p class="benefit-item__title">Maximize<br />Plant Diversity</p>
+						<p class="benefit-item__text">25 plants in our<br />green juices</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>

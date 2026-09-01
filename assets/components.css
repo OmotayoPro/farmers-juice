@@ -184,10 +184,33 @@
 }
 
 /* ---- Section shell ---- */
+/* White, not a gradient: the green and its fade now come from the bg-art SVG,
+   whose own bottom edge is solid white edge-to-edge — so the art hands off to
+   this with no seam however tall the hero grows. */
 .pdp-hero {
   position: relative;
-  background: linear-gradient(180deg, var(--color-surface-light-green) 0%, var(--color-white) 60%);
+  background: var(--color-white);
   padding-block-end: var(--space-16);
+}
+
+/* Mobile shows the artwork cropped rather than shrunk (Figma 2186:1805 places
+   it at native scale, offset left) — `cover` on a 649px band reproduces that
+   and still includes the full vertical range, so the white wave at the bottom
+   of the SVG lands on the band's bottom edge. */
+.pdp-hero__bg {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 649px;
+  background: url("/images/hero/bg-art.svg") no-repeat 36% top / cover;
+  pointer-events: none;
+}
+
+/* The art is the only positioned element in the hero, so the content needs a
+   stacking position of its own to sit on top of it. */
+.pdp-hero .page-container {
+  position: relative;
+  z-index: 1;
 }
 
 .pdp-hero__grid {
@@ -203,28 +226,83 @@
   padding-block-start: var(--hero-block-start-mobile);
 }
 
+/* On mobile this wrapper doesn't participate in layout at all — its
+   children fall back to being individual grid items placed by the
+   grid-area rules below, matching the areas listed above. */
+.pdp-hero__left-col {
+  display: contents;
+}
+
 @media (min-width: 1025px) {
+  /* Full width at the artwork's own 1440:1105 ratio, top-aligned — matching
+     bg-art's placement in the hero frame. Height follows width, so it scales
+     with the viewport instead of being pinned to 1105px. */
+  .pdp-hero__bg {
+    height: auto;
+    aspect-ratio: 1440 / 1105;
+    background-position: top center;
+    background-size: 100% 100%;
+  }
+
   .pdp-hero__grid {
-    grid-template-columns: 601px 1fr;
+    /* Two equal fluid columns, not a fixed 601px gallery (Figma 2206:7416 —
+       both children are flex-[1_0_0]). With the container capped at 1280 this
+       lands on 540px each at full size and shrinks together below that. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
-      "gallery dropdown"
-      "gallery buybox"
-      "navbtn  buybox"
-      "call    buybox";
+      "left-col dropdown"
+      "left-col buybox";
     column-gap: var(--hero-column-gap);
+    /* Only one row boundary exists at desktop — dropdown above buybox — so this
+       is the dropdown-to-rating gap (Figma: 2186:200 ends at 223, 2186:206
+       starts at 231). Mobile keeps 16px there, matching 2186:1823/2186:1829. */
     row-gap: var(--space-2);
     padding-block-start: var(--hero-block-start-desktop);
   }
 
+  /* gallery + navbtn + call become one independent flex column (Figma
+     carousel-contact-div, 2191:4517) instead of 3 separate grid rows.
+     That matters because buybox spans the whole right column: sharing
+     its row-tracks previously inflated navbtn/call's tracks to help
+     cover buybox's height (CSS Grid distributes a spanning item's extra
+     height across every auto track it crosses), even though the
+     buttons themselves only needed ~38px/~122px. A flex column has no
+     such cross-column coupling — each child sizes to its own content. */
+  .pdp-hero__left-col {
+    display: flex;
+    flex-direction: column;
+    grid-area: left-col;
+    align-self: start;
+    /* items-end (2206:7417): hero-menu-contact hangs off the right edge of the
+       column, under the image rather than under the thumbnail rail. */
+    align-items: flex-end;
+    gap: var(--space-2);
+    position: sticky;
+    top: 80px;
+  }
+
   .pdp-hero__gallery {
+    width: 100%;
     margin-block-end: var(--space-2);
+  }
+
+  /* hero-menu-contact (Figma 2206:7433): a 455px zone right-aligned in the
+     column, with the 359px button/card centered inside it. min() so it can't
+     outgrow a column narrower than 455. */
+  .pdp-hero__navbtn,
+  .pdp-hero__call {
+    display: flex;
+    justify-content: center;
+    width: min(455px, 100%);
   }
 }
 
 .pdp-hero__gallery  { grid-area: gallery; }
 .pdp-hero__navbtn   { grid-area: navbtn; }
 .pdp-hero__call     { grid-area: call; }
-.pdp-hero__dropdown { grid-area: dropdown; }
+/* Sits above the sticky gallery column and the buy box so the open options
+   panel overlays them rather than being painted under. */
+.pdp-hero__dropdown { grid-area: dropdown; position: relative; z-index: 10; }
 .pdp-hero__buybox   { grid-area: buybox; display: flex; flex-direction: column; gap: var(--space-4); }
 
 /* ---- Gallery ---- */
@@ -291,6 +369,7 @@
 }
 
 .gallery__arrow {
+  position: relative;
   display: none;
   align-items: center;
   justify-content: center;
@@ -299,14 +378,49 @@
   flex-shrink: 0;
 }
 
-.gallery__arrow img {
+/* Two stacked icons crossfade on hover/focus rather than swapping src
+   (CSS can't retarget an <img> src). max-width:none + flex-shrink:0
+   override the global img reset, which otherwise lets the flex layout
+   here squash a same-size replaced element to a non-square box. The
+   source SVGs are drawn sideways — Figma's own export rotates them
+   -90deg + flips vertically to reach the up/down arrows shown in the
+   design, so we reproduce that same transform here. */
+.gallery__arrow-icon {
+  position: absolute;
+  inset: 0;
   width: 32px;
   height: 32px;
+  max-width: none;
+  flex-shrink: 0;
+  transform: rotate(-90deg) scaleY(-1);
+  transition: opacity 0.15s ease;
+}
+
+.gallery__arrow-icon--hover {
+  opacity: 0;
+}
+
+.gallery__arrow:hover .gallery__arrow-icon--default,
+.gallery__arrow:focus-visible .gallery__arrow-icon--default {
+  opacity: 0;
+}
+
+.gallery__arrow:hover .gallery__arrow-icon--hover,
+.gallery__arrow:focus-visible .gallery__arrow-icon--hover {
+  opacity: 1;
 }
 
 .gallery__arrow:disabled {
   opacity: 0.3;
   cursor: default;
+}
+
+.gallery__arrow:disabled:hover .gallery__arrow-icon--default {
+  opacity: 1;
+}
+
+.gallery__arrow:disabled:hover .gallery__arrow-icon--hover {
+  opacity: 0;
 }
 
 .gallery__arrow:focus-visible {
@@ -321,28 +435,73 @@
     gap: var(--space-6);
   }
 
+  /* The image drives the block's height; the rail is taken out of that
+     calculation entirely and pinned to it. As a flex sibling the rail sized
+     itself from its own content (32 + 24 + 7x64 + 24 + 32 = 608px) and became
+     the tallest item, which made the gallery box taller than the photo no
+     matter what align-self said — a stretched item still contributes its
+     content height to the container. Absolute removes that contribution, so
+     top/bottom:0 resolves against the viewer's aspect-ratio height. */
+  .gallery {
+    display: block;
+    position: relative;
+  }
+
+  /* One variable drives the rail width, the thumbnail size and the viewer's
+     offset, so they can't drift apart. Flat 56px at every desktop width, per
+     Figma 2206:7423 — the thumbnails hold their size as the screen narrows
+     rather than scaling down with it. */
+  .gallery {
+    --gallery-rail-width: 56px;
+  }
+
+  /* 16px between the arrows and the thumbnail strip (2206:7419 gap-[16px]). */
   .gallery__rail {
-    order: 1;
-    width: 64px;
-    flex-shrink: 0;
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: var(--gallery-rail-width);
+    gap: var(--space-4);
   }
 
+  /* Fluid: takes the column's remaining width (88px = 64 rail + 24 gap) and
+     derives its height from the image's aspect ratio — Figma 2206:7432 is
+     flex-[1_0_0] + aspect-[826/967]. */
   .gallery__viewer {
-    order: 2;
-    width: 513px;
+    margin-inline-start: calc(var(--gallery-rail-width) + var(--space-6));
+    width: auto;
     max-width: none;
-    height: 600px;
-    aspect-ratio: auto;
+    height: auto;
+    aspect-ratio: 826 / 967;
   }
 
+  /* Fills the rail between the two arrows and spreads the thumbnails through
+     it. Scrolls rather than overflowing when the column gets short enough that
+     7 x 64px no longer fits. */
   .gallery__thumbnails {
     flex-direction: column;
-    overflow: visible;
+    flex: 1;
+    min-height: 0;
+    /* No gap of its own — spacing is purely what space-between distributes out
+       of the image's leftover height (2206:7422 is justify-between, no gap). */
+    gap: 0;
+    justify-content: space-between;
+    overflow-x: visible;
+    /* Safety net for columns too short to hold all 7; not reached at 1280. */
+    overflow-y: auto;
+    padding-block: 0;
+    scrollbar-width: none;
   }
 
+  .gallery__thumbnails::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Square, sized off the same variable as the rail. */
   .gallery__thumbnail {
-    width: 64px;
-    height: 64px;
+    width: var(--gallery-rail-width);
+    height: auto;
+    aspect-ratio: 1;
   }
 
   .gallery__arrow {
@@ -385,6 +544,13 @@
   outline-offset: 2px;
 }
 
+@media (min-width: 1025px) {
+  .nutrition-trigger {
+    width: 359px;
+    flex-shrink: 0;
+  }
+}
+
 /* ---- Customer-support card / badge ---- */
 .support-card {
   display: flex;
@@ -417,7 +583,7 @@
   flex-direction: column;
   gap: var(--space-1);
   padding-block: var(--space-2);
-  padding-inline-start: var(--space-4);
+  padding-inline: var(--space-4);
   border-left: 1px dashed var(--color-green-800);
 }
 
@@ -433,7 +599,7 @@
 
 .support-card__phone {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-1);
 }
 
@@ -464,6 +630,8 @@
 
 @media (min-width: 1025px) {
   .support-card {
+    width: 359px;
+    flex-shrink: 0;
     background: var(--color-white);
     border: 1px solid var(--color-border-dark);
     padding-block: var(--space-2);
@@ -479,6 +647,22 @@
     height: 26px;
   }
 
+  /* Desktop's text block: 4px vertical padding, no gap between the three
+     lines — they rely on their own line-heights for spacing instead. */
+  .support-card__body {
+    gap: 0;
+    padding-block: var(--space-1);
+  }
+
+  .support-card__prompt {
+    line-height: var(--lh-body-small);
+  }
+
+  .support-card__phone span {
+    font-size: var(--fs-body-small);
+    line-height: var(--lh-body-small);
+  }
+
   .support-card__phone a {
     font-size: var(--fs-title-small);
     line-height: var(--lh-title-small);
@@ -486,21 +670,29 @@
 
   .support-card__note {
     font-size: var(--fs-body-xxs);
-    line-height: var(--lh-paragraph-small);
+    line-height: var(--lh-body-xxs);
   }
 }
 
 /* ---- Select box (category dropdown / product title) ---- */
+/* Positioning context for the options panel, which overlays rather than
+   pushes the buy box below it. */
+.select-box {
+  position: relative;
+}
+
 .select-box__trigger {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   text-align: left;
   padding: var(--space-3) var(--space-4);
   border: 2px solid var(--color-border-primary);
   border-radius: var(--radius-sm);
-  background: var(--color-white);
+  /* Figma 2186:200 — the closed trigger has no fill; it sits on whatever
+     the hero background is, it is not a white card. */
+  background: transparent;
 }
 
 .select-box__label {
@@ -539,30 +731,76 @@
   transform: rotate(180deg);
 }
 
+/* Absolutely positioned so opening the dropdown overlays the content beneath
+   it instead of reflowing the buy box. z-index clears the sticky gallery
+   column, which paints in the positioned layer at z-index auto. */
 .select-box__panel {
-  margin-top: var(--space-2);
-  border: 1px solid var(--color-border-light);
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + var(--space-2));
+  z-index: 20;
+  border: 2px solid var(--color-border-primary);
   border-radius: var(--radius-sm);
   overflow: hidden;
+  background: var(--color-white);
 }
 
 .select-box__option {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
   text-align: left;
-  padding: var(--space-3) var(--space-4);
-  font-family: var(--font-body);
-  font-weight: var(--weight-medium);
-  font-size: var(--fs-body-medium);
-  line-height: var(--lh-body-medium);
+  padding: var(--space-4);
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: var(--fs-heading-h6);
+  line-height: var(--lh-heading-h6);
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  background: var(--box-surface, var(--color-white));
+  transition: box-shadow 0.15s ease;
 }
 
-.select-box__option.is-selected {
-  background: var(--color-surface-selected-glow);
+/* Category surface per option — token lookup, no inline colours. */
+.select-box__option[data-box="greens"]      { --box-surface: var(--color-cat-greens); }
+.select-box__option[data-box="fiber"]       { --box-surface: var(--color-cat-fiber); }
+.select-box__option[data-box="variety"]     { --box-surface: var(--color-cat-variety); }
+.select-box__option[data-box="build"]       { --box-surface: var(--color-cat-build); }
+.select-box__option[data-box="smoothie"]    { --box-surface: var(--color-cat-smoothie); }
+.select-box__option[data-box="electrolyte"] { --box-surface: var(--color-cat-electrolyte); }
+.select-box__option[data-box="cleanse"]     { --box-surface: var(--color-cat-cleanse); }
+
+.select-box__option:hover,
+.select-box__option:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-border-primary);
+  outline: none;
+}
+
+.select-box__check {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  opacity: 0;
+}
+
+.select-box__option.is-selected .select-box__check {
+  opacity: 1;
 }
 
 @media (min-width: 1025px) {
   .select-box__trigger {
     padding: var(--space-4) var(--space-6);
+  }
+
+  .select-box__option {
+    padding: var(--space-5) var(--space-6);
+  }
+
+  .select-box__check {
+    width: 28px;
+    height: 28px;
   }
 
   .select-box__label {
@@ -581,12 +819,28 @@
   }
 }
 
+/* ---- Highlights stack (rating + checkmarks + badges) ---- */
+/* Figma 2186:207 / mobile 2186:1829 — its own 8px rhythm, inside the buy box's
+   looser 16px one. */
+.highlights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
 /* ---- Rating ---- */
+/* Figma 2186:208 (desktop) / 2186:1830 (mobile): a white 6px-radius plate.
+   Sized to its content at both breakpoints — the plate ends where the text
+   ends rather than running the width of the buy-box column. Desktop adds
+   4px/8px padding; mobile has none. */
 .rating {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   flex-wrap: wrap;
+  align-self: flex-start;
+  background: var(--color-white);
+  border-radius: var(--radius-xs);
 }
 
 .rating__value {
@@ -637,16 +891,27 @@
 .checkmarks.is-desktop-only { display: none; }
 .checkmarks.is-mobile-only  { display: flex; }
 
+/* The tick is part of the copy in Figma (a literal "✓ " on each line), so it
+   lives in generated content rather than the markup — decorative, and screen
+   readers skip it. */
+.checkmarks li::before {
+  content: "✓ ";
+}
+
 .badges {
   list-style: none;
   display: flex;
   gap: var(--space-2);
   justify-content: space-between;
+  align-items: center;
   width: 100%;
+  background: var(--color-white);
 }
 
 .badges.is-desktop-only { display: none; }
-.badges.is-mobile-only  { display: flex; }
+/* Mobile sets the badge row 16px below the checkmarks (Figma 2186:1851),
+   where desktop keeps the flat 8px rhythm — hence the extra 8px here. */
+.badges.is-mobile-only  { display: flex; margin-block-start: var(--space-2); }
 
 .badges li {
   display: flex;
@@ -660,6 +925,23 @@
   flex-shrink: 0;
 }
 
+/* Rounded disc behind an icon (Figma "Frame 39468"). Square box, radius equal
+   to its own size, so it renders as a circle at either breakpoint. */
+.badges__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.badges__icon--white       { background: var(--color-white); }
+.badges__icon--glow        { background: var(--color-surface-selected-glow); }
+.badges__icon--light-green { background: var(--color-surface-light-green); }
+
 .badges span {
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
@@ -670,6 +952,10 @@
 }
 
 @media (min-width: 1025px) {
+  .rating {
+    padding: var(--space-1) var(--space-2);
+  }
+
   .checkmarks {
     font-size: var(--fs-body-small);
     line-height: var(--lh-body-small);
@@ -696,6 +982,18 @@
   .badges img {
     width: 56px;
     height: 56px;
+  }
+
+  .badges__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 56px;
+  }
+
+  /* Desktop badges sit on the hero art, not a white row — only the discs
+     themselves are filled (Figma 2186:229 has no fill). */
+  .badges {
+    background: transparent;
   }
 
   .badges span {
@@ -739,6 +1037,8 @@
 }
 
 .option-btn {
+  /* Mobile splits the row evenly (177px each at the 402 frame, per 2186:1887);
+     desktop pins the two widths — see the media query below. */
   flex: 1;
   height: 40px;
   display: flex;
@@ -746,13 +1046,18 @@
   justify-content: center;
   border-radius: 5px;
   border: 2px solid var(--color-border-primary);
-  background: var(--color-white);
+  /* Unselected has no fill in Figma (2186:267 carries only a border and
+     opacity-80) — it sits directly on the hero art. */
+  background: transparent;
   font-family: var(--font-body);
   font-weight: var(--weight-semibold);
   font-size: var(--fs-paragraph-small);
   line-height: var(--lh-paragraph-small);
   color: var(--color-text-body);
   opacity: 0.8;
+  /* Deliberately NOT transitioning flex-basis/max-width: animating both at once
+     inside a flex row leaves the computed basis latched at its old value, so
+     the desktop 196/215 swap silently stops happening. Colour only. */
   transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
   text-align: center;
 }
@@ -773,10 +1078,13 @@
   outline-offset: 2px;
 }
 
+/* Inline padding is 8px, not Figma's 16px: "12 Juices + 5 Shots" measures the
+   same 183px the design does, but the button's own content box is exactly
+   183px too, so it wrapped on the rounding. 8px buys real slack. */
 .option-btn--tagged {
   flex-direction: column;
   height: 80px;
-  padding: var(--space-4);
+  padding: var(--space-4) var(--space-2);
   gap: var(--space-1);
 }
 
@@ -800,24 +1108,90 @@
 }
 
 @media (min-width: 1025px) {
+  /* 215px regardless of selection (Figma 2206:7515/7517/7522/7527/7535/7537 are
+     all w-[215px]). Basis rather than a hard width so a pair can shrink
+     together in a column narrower than 446 instead of overflowing it. */
   .option-btn {
+    flex: 0 1 215px;
+    max-width: 215px;
     height: 48px;
     font-size: var(--fs-paragraph-medium);
     line-height: var(--lh-paragraph-medium-tight);
   }
 
-  /* Desktop's tag flap swaps to the UI font (Campton) instead of the
-     display font used everywhere else at this size. */
+  /* "2. Select size" is its own variant (Figma 2206:7522): two stacked boxes,
+     not one box with a divider. The <button> becomes a bare 215px column that
+     carries neither fill nor border — the flap and the box below it each carry
+     their own — so selecting the option colours only the lower box. Mobile
+     keeps the single-box treatment (2186:1894), hence desktop-only. */
+  .option-btn--tagged {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: auto;
+    padding: 0;
+    gap: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+  }
+
+  .option-btn--tagged.is-selected {
+    background: none;
+    border-color: transparent;
+  }
+
+  /* The upper box: no fill, width from its own text, and a 2px rule on the
+     left, top and right only. Drawn as two inset shadows rather than a border
+     (exactly what Figma does) so the open bottom edge costs no layout height
+     and the flap sits flush on the box below. */
   .option-btn__tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 24px;
+    padding: 0 var(--space-3);
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+    box-shadow:
+      inset 2px 2px 0 0 var(--color-black),
+      inset -2px 2px 0 0 var(--color-black);
+    background: transparent;
+    color: var(--color-black);
+    overflow: hidden;
+    white-space: nowrap;
+    /* Campton here, not the display font used at this size elsewhere. */
     font-family: var(--font-body);
     font-weight: var(--weight-semibold);
     font-size: var(--fs-paragraph-small);
     line-height: var(--lh-paragraph-small);
   }
 
+  /* The lower box: the actual selection target, carrying the fill/border the
+     plain .option-btn would normally have. */
   .option-btn__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    padding-inline: var(--space-2);
+    border: 2px solid var(--color-border-primary);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--color-text-body);
+    white-space: nowrap;
+    font-weight: var(--weight-semibold);
     font-size: var(--fs-paragraph-medium);
     line-height: var(--lh-paragraph-medium-tight);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .option-btn--tagged.is-selected .option-btn__label {
+    background: var(--color-neutral);
+    border-color: var(--color-neutral);
+    color: var(--color-white);
   }
 }
 
@@ -832,30 +1206,64 @@
 .subscription__row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 370px;
-  gap: var(--space-4);
+  gap: var(--space-2);
 }
 
-.subscription__row span {
+.subscription__prefix,
+.subscription__select,
+.subscription__sizer {
   font-family: var(--font-body);
   font-weight: var(--weight-book);
   font-size: var(--fs-body-small);
   line-height: var(--lh-body-small);
+  letter-spacing: var(--tracking-tight);
   color: var(--color-black);
   text-align: left;
 }
 
-.subscription__value {
+.subscription__field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+/* Stripped back to plain text so only the native menu is native — the closed
+   state has to read as the underlined value from Figma 2186:293. */
+.subscription__select,
+.subscription__sizer {
   font-weight: var(--weight-semibold);
   text-decoration: underline;
 }
 
-.subscription__row img {
+.subscription__select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* Off-screen twin of the selected option — app.js copies the current label in
+   and sets the select's width from it, so the chevron tracks the value. */
+.subscription__sizer {
+  position: absolute;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.subscription__chevron {
   width: 14px;
   height: 14px;
   flex-shrink: 0;
+}
+
+.subscription__select:focus-visible {
+  outline: 2px solid var(--color-green-web);
+  outline-offset: 2px;
 }
 
 .subscription__note {
@@ -867,7 +1275,9 @@
 }
 
 @media (min-width: 1025px) {
-  .subscription__row span {
+  .subscription__prefix,
+  .subscription__select,
+  .subscription__sizer {
     font-size: var(--fs-paragraph-small);
     line-height: var(--lh-paragraph-small);
   }
@@ -1014,32 +1424,43 @@
    dark scrim, so title/close use white and each pill/image carries its
    own background.
    ============================================================ */
+/* The overlay itself scrolls, not the modal — that puts the scrollbar against
+   the edge of the screen instead of 128px inside it, on the modal's own box. */
 .nutrition-overlay {
+  /* Modal's outer width at desktop: Figma's 1168px grid + its 16px gutters.
+     Shared with the close buttons so they sit on the modal's right edge. */
+  --nutrition-modal-max: 1200px;
   position: fixed;
   inset: 0;
   z-index: 100;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .nutrition-overlay[hidden] {
   display: none;
 }
 
+/* Fixed, not absolute: the overlay is now a scroll container, so an absolute
+   backdrop would only cover the first viewport and clicks past it would miss. */
 .nutrition-overlay__backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
+/* fit-content so the modal's box hugs its content: everything to the left and
+   right of it is backdrop, and a click there closes rather than landing on an
+   invisible full-width modal box. */
 .nutrition-modal {
   position: relative;
   z-index: 1;
-  max-width: var(--container-content);
+  width: fit-content;
+  max-width: 100%;
   margin-inline: auto;
   margin-block: var(--space-16) var(--space-8);
-  max-height: calc(100svh - var(--space-16) - var(--space-8));
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1054,18 +1475,41 @@
   pointer-events: none;
 }
 
-.nutrition-modal__close {
-  position: absolute;
-  top: var(--space-2);
-  right: var(--space-2);
+/* Both closes share one fixed position so the X doesn't jump when the expanded
+   view opens on top of the modal. Fixed rather than absolute because the modal
+   scrolls inside the overlay while the zoom layer doesn't — anchoring both to
+   the viewport is the only way they land on the same spot.
+
+   padding:0 is load-bearing. The UA sheet gives buttons `padding: 1px 6px`,
+   and with border-box that left a 24x24 button only 12x22 of content — which
+   is what squashed the X out of square. */
+.nutrition-modal__close,
+.nutrition-zoom__close {
+  position: fixed;
+  top: calc(var(--space-16) + var(--space-2));
+  right: max(var(--space-2), calc((100% - var(--nutrition-modal-max)) / 2 + var(--space-2)));
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 24px;
   height: 24px;
+  padding: 0;
   z-index: 2;
 }
 
-.nutrition-modal__close img {
-  width: 100%;
-  height: 100%;
+.nutrition-modal__close img,
+.nutrition-zoom__close img {
+  width: 24px;
+  height: 24px;
+  max-width: none;
+  flex-shrink: 0;
+}
+
+/* The dimmed modal's blur() would become the containing block for its own
+   fixed close button and drag it off position. It's behind the zoom layer and
+   inert at that point, so drop it out of the box tree entirely. */
+.nutrition-modal.is-dimmed .nutrition-modal__close {
+  display: none;
 }
 
 .nutrition-modal__title {
@@ -1158,8 +1602,25 @@
     line-height: var(--lh-title-small);
   }
 
+  .nutrition-filter img {
+    height: 40px;
+  }
+
+  /* Grid rather than wrapping flex, capped at Figma's 1168px (2186:1477 —
+     4 x 280 + 3 x 16) and centred. As a flex row it only ever fitted 3 per
+     row, because the modal's own scrollbar ate the 16px the 4th needed, and
+     8 items then wrapped 3/3/2 and read as left-aligned. */
+  .nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 280px));
+    justify-content: center;
+    max-width: 1168px;
+    margin-inline: auto;
+  }
+
   .nutrition-grid__item {
-    width: 280px;
+    width: 100%;
+    max-width: none;
   }
 }
 
@@ -1177,11 +1638,13 @@
   display: none;
 }
 
+/* Fills 80% of the viewport height, width following the aspect ratio, capped
+   so it can't run off the sides on a short/wide window. */
 .nutrition-zoom__image {
-  max-width: min(500px, 90vw);
-  max-height: 80svh;
+  height: 80svh;
   width: auto;
-  height: auto;
+  max-width: 92vw;
+  max-height: 80svh;
   object-fit: contain;
   border-radius: var(--radius-md);
 }
@@ -1208,19 +1671,6 @@
   height: 24px;
 }
 
-.nutrition-zoom__close {
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
-  width: 24px;
-  height: 24px;
-}
-
-.nutrition-zoom__close img {
-  width: 100%;
-  height: 100%;
-}
-
 .nutrition-modal__close:focus-visible,
 .nutrition-zoom__back:focus-visible,
 .nutrition-zoom__close:focus-visible {
@@ -1229,15 +1679,11 @@
 }
 
 @media (min-width: 1025px) {
+  /* Mirrors the close button on the opposite edge of the same 1200px column. */
   .nutrition-zoom__back {
-    top: var(--space-8);
-    left: calc((100% - var(--container-content)) / 2 + var(--space-4));
+    top: var(--space-16);
+    left: max(var(--space-4), calc((100% - var(--nutrition-modal-max)) / 2 + var(--space-2)));
     font-size: var(--fs-heading-h5);
-  }
-
-  .nutrition-zoom__close {
-    top: calc(50% - 292px);
-    right: calc((100% - var(--container-content)) / 2 + var(--space-4));
   }
 }
 
@@ -1314,15 +1760,18 @@
   display: none;
 }
 
+/* Mobile is a horizontal row card (Figma 2186:3729): 104x150 image on the
+   left, copy on the right. Desktop stacks it — see the media query below. */
 .juice-card__body {
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 164px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--space-8);
+  gap: var(--space-2);
+  padding: 7px var(--space-4);
   cursor: default;
 }
 
@@ -1330,8 +1779,8 @@
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
 }
 
 .juice-card__badge {
@@ -1355,27 +1804,41 @@
   background: var(--color-turquoise);
 }
 
+/* No padding on the container. Figma centres a 142px image inside the card's
+   full inner width — the "px-[57px]" the exporter reports is that centring
+   expressed as padding for one 256px-wide card, not a real inset. Applying it
+   as literal padding starved the content box to 109px; the global
+   `img { max-width: 100% }` then clamped the image to that width while
+   `object-fit: cover` held the height at 204px, cropping 33px off the sides. */
 .juice-card__image-wrap {
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-inline: var(--space-14);
+  flex-shrink: 0;
 }
 
+/* Mobile image box, 2186:3730. `contain` so it can never crop, whatever the
+   source asset's ratio. */
 .juice-card__image-wrap img {
-  height: 204px;
-  width: auto;
-  object-fit: cover;
+  width: 104px;
+  height: 150px;
+  object-fit: contain;
 }
 
 .juice-card__content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
-  text-align: center;
-  width: 100%;
+  align-items: flex-start;
+  /* Title and plant-count sit flush (Figma 2186:3732); only the ingredients
+     get the 4px, so the gap lives on that element rather than here. */
+  gap: 0;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+}
+
+.juice-card__ingredients {
+  margin-block-start: var(--space-1);
 }
 
 .juice-card__content h3 {
@@ -1398,8 +1861,8 @@
 .juice-card__ingredients {
   font-family: var(--font-body);
   font-weight: var(--weight-book);
-  font-size: var(--fs-body-medium);
-  line-height: var(--lh-body-medium);
+  font-size: var(--fs-body-small);
+  line-height: var(--lh-body-small);
   color: var(--color-text-primary);
 }
 
@@ -1418,46 +1881,109 @@
     grid-template-columns: repeat(5, 1fr);
   }
 
+  /* Desktop stacks: image above copy (Figma 2186:3903). The 8px is the gap
+     between the image container and the content block (204 -> 212). */
   .juice-card__body {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 0;
     padding: var(--space-4) var(--space-8);
+  }
+
+  .juice-card__image-wrap {
+    width: 100%;
+  }
+
+  /* 142x204 at full size, shrinking proportionally once the card gets narrower
+     than that — `contain` keeps it letterboxed rather than cropped. */
+  .juice-card__image-wrap img {
+    width: 100%;
+    max-width: 142px;
+    height: auto;
+    aspect-ratio: 142 / 204;
+  }
+
+  .juice-card__content {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .juice-card__ingredients {
+    font-size: var(--fs-body-medium);
+    line-height: var(--lh-body-medium);
+  }
+
+  .juice-card__seal {
+    width: 40px;
+    height: 40px;
   }
 }
 
 /* ============================================================
    Juice benefits row ("Why try our juices?")
    ============================================================ */
+/* Four nested levels, each with its own gap — mobile 2186:2260, desktop
+   2186:4233. They are deliberately different at every level, so none of them
+   inherit from a shared value:
+
+                     mobile   desktop
+     title -> row      8px      16px
+     item -> item      8px      40px
+     icon -> copy     16px      16px
+     heading -> text   4px       0
+
+   The 0 at the innermost level is what keeps a benefit's two text lines
+   reading as one block rather than two. */
 .juice-benefits {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-2);
   padding-block: var(--space-16);
 }
 
 .juice-benefits__title {
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
-  font-size: var(--fs-heading-h4);
-  line-height: var(--lh-heading-h4);
+  font-size: var(--fs-heading-h5);
+  line-height: var(--lh-heading-h5);
   text-transform: uppercase;
   text-align: center;
   color: var(--color-text-emphasis);
 }
 
+/* Centred flex row, not a stretched grid: in Figma each item is only as wide
+   as its own copy and the row is centred as a unit (2186:4235). */
 .juice-benefits__row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
   width: 100%;
-  max-width: 500px;
 }
 
 .benefit-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--space-4);
+  /* Basis, so three fit a 349px row at the 402 frame but can still shrink on
+     a narrower phone rather than overflowing. */
+  flex: 0 1 111px;
+  min-width: 0;
   text-align: center;
+}
+
+.benefit-item__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
 }
 
 .benefit-item.is-desktop-only {
@@ -1481,37 +2007,66 @@
   overflow: hidden;
 }
 
+/* ~84% of the disc, matching how the artwork is inset inside the 104px circle
+   in Figma (87.6 / 104). */
 .benefit-item__icon img {
-  width: 68%;
-  height: 68%;
+  width: 84%;
+  height: 84%;
   object-fit: contain;
 }
 
 .benefit-item__title {
   font-family: var(--font-body);
   font-weight: var(--weight-semibold);
-  font-size: var(--fs-body-large);
-  line-height: 26px;
+  font-size: var(--fs-body-small);
+  line-height: var(--lh-body-small);
   color: var(--color-text-emphasis);
 }
 
-.benefit-item__copy {
+.benefit-item__text {
   font-family: var(--font-body);
-  font-weight: var(--weight-medium);
-  font-size: var(--fs-body-medium);
-  line-height: var(--lh-body-medium);
+  font-weight: var(--weight-book);
+  font-size: var(--fs-body-xxs);
+  line-height: var(--lh-body-xxs);
   color: var(--color-text-primary);
 }
 
 @media (min-width: 1025px) {
+  .juice-benefits {
+    gap: var(--space-4);
+  }
+
+  .juice-benefits__title {
+    font-size: var(--fs-heading-h3);
+    line-height: var(--lh-heading-h3);
+  }
+
   .juice-benefits__row {
-    grid-template-columns: repeat(4, 1fr);
-    max-width: none;
+    align-items: flex-start;
     gap: var(--space-10);
+  }
+
+  .benefit-item {
+    flex: 0 0 auto;
+  }
+
+  .benefit-item__copy {
+    gap: 0;
   }
 
   .benefit-item__icon {
     width: 104px;
     height: 104px;
+  }
+
+  .benefit-item__title {
+    font-size: var(--fs-body-large);
+    line-height: var(--lh-paragraph-medium-tight);
+  }
+
+  .benefit-item__text {
+    font-weight: var(--weight-medium);
+    font-size: var(--fs-body-medium);
+    line-height: var(--lh-body-medium);
   }
 }

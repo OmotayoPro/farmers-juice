@@ -3,45 +3,52 @@
    Resets, self-hosted fonts, layout primitives.
    ============================================================ */
 
+/* Font-weight values here are hardcoded numbers, not var(--weight-*) —
+   custom properties don't reliably resolve inside @font-face descriptors
+   (it isn't tied to an element, so there's no cascade for var() to read
+   from). Using the tokens here silently collapsed Book/Medium/SemiBold
+   to the same "normal" (400) weight, losing three distinct faces. Keep
+   these numbers in sync with tokens.css --weight-book/medium/semibold by
+   hand if those ever change. */
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton Book.otf") format("opentype");
-  font-weight: var(--weight-book);
+  font-weight: 475;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton Book Italic.otf") format("opentype");
-  font-weight: var(--weight-book);
+  font-weight: 475;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton Medium.otf") format("opentype");
-  font-weight: var(--weight-medium);
+  font-weight: 550;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton Medium Italic.otf") format("opentype");
-  font-weight: var(--weight-medium);
+  font-weight: 550;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton SemiBold.otf") format("opentype");
-  font-weight: var(--weight-semibold);
+  font-weight: 625;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Campton";
   src: url("./fonts/campton/Campton SemiBold Italic.otf") format("opentype");
-  font-weight: var(--weight-semibold);
+  font-weight: 625;
   font-style: italic;
   font-display: swap;
 }
@@ -69,7 +76,7 @@
 @font-face {
   font-family: "Peperoncino Sans";
   src: url("./fonts/peperoncino-sans/Peperoncino Sans Regular.otf") format("opentype");
-  font-weight: var(--weight-regular);
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -98,12 +105,17 @@ img {
   max-width: 100%;
 }
 
-button {
+button,
+select {
   font: inherit;
   color: inherit;
   background: none;
   border: none;
   cursor: pointer;
+  /* The `font` shorthand doesn't carry letter-spacing, and the UA sheet forces
+     `normal` on form controls — so every button rendered ~1% wider than the
+     design, which is drawn with the global -1% tracking. */
+  letter-spacing: inherit;
 }
 
 a {
@@ -152,17 +164,14 @@ body.no-scroll {
   }
 }
 
-/* The hero is full-bleed in the design (bg-art runs edge to edge) and its own
-   content already measures exactly --container-desktop (1280px) with no extra
-   gutter at the confirmed breakpoint — unlike below-fold sections, which use
-   the narrower --container-content gutter above. */
-.pdp-hero .page-container {
-  max-width: var(--container-desktop);
-}
-
+/* The hero's background art is full-bleed, but its content is not: it stays in
+   the shared 1280px container, centered, so it stops growing on wide screens
+   (Figma 2206:7412 — the hero frame is w-[1280px] with px-[80px]). The only
+   difference from the default container is the flat 80px gutter, wider than
+   the --container-content gutter the below-fold sections use. */
 @media (min-width: 1025px) {
   .pdp-hero .page-container {
-    padding-inline: 0;
+    padding-inline: 80px;
   }
 }
 

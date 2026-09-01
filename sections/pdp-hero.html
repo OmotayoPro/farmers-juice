@@ -2,15 +2,30 @@
      Maps to a Liquid section; {{ product.* }} call-outs mark where real
      Shopify data replaces the hardcoded fixture values from content/greens.json. -->
 <section class="pdp-hero" data-section="pdp-hero" data-product="greens">
+  <!-- bg-art (Figma 2186:165): full-bleed landscape illustration — radial
+       gradient sky, hand-drawn horizon, and the white wave that hands off to
+       the white page below it. Decorative, so it's a background rather than an
+       <img>, and hidden from assistive tech. -->
+  <div class="pdp-hero__bg" aria-hidden="true"></div>
+
   <div class="page-container">
     <div class="pdp-hero__grid">
+
+      <!-- Desktop only: gallery + navbtn + call form one independent flex column
+           (Figma carousel-contact-div, 2191:4517) so buybox's height — which
+           spans the whole right column — can't inflate their row-tracks. On
+           mobile this wrapper is display:contents and each child goes back to
+           being its own grid area, since mobile's call-badge sits at the very
+           bottom, after buybox, not next to navbtn. -->
+      <div class="pdp-hero__left-col">
 
       <!-- gallery: {{ product.images }} -->
       <div class="pdp-hero__gallery">
         <div class="gallery" data-gallery>
           <div class="gallery__rail">
             <button type="button" class="gallery__arrow gallery__arrow--up" data-gallery-prev aria-label="Previous image">
-              <img src="/assets/icons/arrow-up.svg" alt="" aria-hidden="true" />
+              <img class="gallery__arrow-icon gallery__arrow-icon--default" src="/assets/icons/arrow-up.svg" alt="" aria-hidden="true" />
+              <img class="gallery__arrow-icon gallery__arrow-icon--hover" src="/assets/icons/arrow-up-hover.svg" alt="" aria-hidden="true" />
             </button>
             <div class="gallery__thumbnails" data-gallery-thumbnails>
               <button type="button" class="gallery__thumbnail is-active" data-gallery-thumb="0" aria-label="Show image 1" aria-current="true">
@@ -36,7 +51,8 @@
               </button>
             </div>
             <button type="button" class="gallery__arrow gallery__arrow--down" data-gallery-next aria-label="Next image">
-              <img src="/assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
+              <img class="gallery__arrow-icon gallery__arrow-icon--default" src="/assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
+              <img class="gallery__arrow-icon gallery__arrow-icon--hover" src="/assets/icons/arrow-down-hover.svg" alt="" aria-hidden="true" />
             </button>
           </div>
           <div class="gallery__viewer">
@@ -45,7 +61,9 @@
         </div>
       </div>
 
-      <!-- menu / nutrition-facts trigger — opens the nutrition modal (built in a later section) -->
+      <!-- menu / nutrition-facts trigger — opens the nutrition modal (built in a later section).
+           Desktop (Figma hero-menu-contact, 2191:4533): fixed 513px wide, flush with
+           the main viewer (88px = rail + gap), 359px button centered inside. -->
       <div class="pdp-hero__navbtn">
         <button type="button" class="nutrition-trigger" data-nutrition-trigger>
           <span>View menu and nutrition facts</span>
@@ -53,7 +71,8 @@
         </button>
       </div>
 
-      <!-- customer-support call-out -->
+      <!-- customer-support call-out. Desktop: same 513px/88px-offset zone as the
+           nutrition trigger above it, 359px card centered inside. -->
       <div class="pdp-hero__call">
         <div class="support-card">
           <span class="support-card__icon">
@@ -67,6 +86,9 @@
         </div>
       </div>
 
+      </div>
+      <!-- /.pdp-hero__left-col -->
+
       <!-- category select box — {{ product.title }}. Visual only: opens to reveal other
            products but does not navigate (only Greens exists in this build). -->
       <div class="pdp-hero__dropdown">
@@ -78,14 +100,63 @@
               <img src="/assets/icons/chevron-down.svg" alt="" aria-hidden="true" class="select-box__chevron" />
             </span>
           </button>
+          <!-- Options overlay the content below (absolutely positioned) so opening
+               the panel never reflows the buy box. Each option carries a
+               data-box category that maps to its surface colour token. -->
           <ul class="select-box__panel" id="product-select-panel" data-dropdown-panel hidden>
-            <li><button type="button" class="select-box__option is-selected" aria-current="true">Greens Only Box (Low Sugar)</button></li>
+            <li>
+              <button type="button" class="select-box__option is-selected" data-dropdown-option data-box="greens" aria-current="true">
+                <span class="select-box__option-label">Greens Only Box (Low Sugar)</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="fiber">
+                <span class="select-box__option-label">Gut Fiber Shot Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="variety">
+                <span class="select-box__option-label">Variety Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="build">
+                <span class="select-box__option-label">Build a Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="smoothie">
+                <span class="select-box__option-label">Daily Smoothie Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="electrolyte">
+                <span class="select-box__option-label">Electrolytes &amp; Juices</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
+            <li>
+              <button type="button" class="select-box__option" data-dropdown-option data-box="cleanse">
+                <span class="select-box__option-label">Juice Cleanse Box</span>
+                <img class="select-box__check" src="/assets/icons/check.svg" alt="" aria-hidden="true" />
+              </button>
+            </li>
           </ul>
         </div>
       </div>
 
       <!-- buy box: rating, badges, options, subscription, price, CTAs -->
       <div class="pdp-hero__buybox">
+
+        <!-- Figma "Frame 39486" (2186:207): rating + checkmarks + badges are one
+             8px-gapped stack, tighter than the 16px the buy box uses between its
+             larger groups. -->
+        <div class="highlights">
 
         <div class="rating">
           <span class="rating__value">4.9</span>
@@ -111,16 +182,22 @@
           <li>Ships in 1 business day</li>
         </ul>
 
+        <!-- Icon wrappers are the Figma "Frame 39468" containers (2186:231 / 2186:235,
+             mobile 2186:1880): 56px (32px mobile) rounded discs with their own fill.
+             The USDA seal has no container — its artwork carries its own ground. -->
         <ul class="badges is-desktop-only">
-          <li><img src="/assets/icons/gut-pounds.png" alt="" /><span>1.5 pounds<br />plants per juice</span></li>
-          <li><img src="/assets/icons/gut-support.png" alt="" /><span>Daily gut<br />support</span></li>
+          <li><span class="badges__icon badges__icon--white"><img src="/assets/icons/gut-pounds.png" alt="" /></span><span>1.5 pounds<br />plants per juice</span></li>
+          <li><span class="badges__icon badges__icon--glow"><img src="/assets/icons/gut-support.png" alt="" /></span><span>Daily gut<br />support</span></li>
           <li><img src="/assets/icons/usda-badge.svg" alt="USDA Organic" /><span>No glyphosate<br />allowed</span></li>
         </ul>
         <ul class="badges is-mobile-only">
           <li><img src="/assets/icons/heart.png" alt="" /><span>family<br />owned</span></li>
           <li><img src="/assets/icons/usda-badge.svg" alt="USDA Organic" /><span>no glyphosate<br />allowed</span></li>
-          <li><img src="/assets/icons/gut-support.png" alt="" /><span>Daily gut<br />support</span></li>
+          <li><span class="badges__icon badges__icon--light-green"><img src="/assets/icons/gut-support.png" alt="" /></span><span>Daily gut<br />support</span></li>
         </ul>
+
+        </div>
+        <!-- /.highlights -->
 
         <div class="option-group" data-option-group>
           <p class="option-group__label">1. Select type</p>
@@ -152,11 +229,25 @@
           </div>
         </div>
 
+        <!-- Delivery frequency is a real <select>: native menu, keyboard and
+             screen-reader support for free. The label wraps it so the chevron
+             is part of the hit area; the sizer span (measured in app.js) keeps
+             the chevron tucked against the current value instead of against the
+             widest option. -->
         <div class="subscription">
-          <button type="button" class="subscription__row" data-subscription-trigger aria-expanded="false">
-            <span>Delivery every <span class="subscription__value">21 Days Save (15%)</span></span>
-            <img src="/assets/icons/chevron-down.svg" alt="" aria-hidden="true" />
-          </button>
+          <div class="subscription__row">
+            <span class="subscription__prefix">Delivery every</span>
+            <label class="subscription__field">
+              <select class="subscription__select" data-subscription-select aria-label="Delivery frequency">
+                <option value="14">14 Days Save (15%)</option>
+                <option value="21" selected>21 Days Save (15%)</option>
+                <option value="28">28 Days Save (15%)</option>
+                <option value="single">Single Purchase</option>
+              </select>
+              <span class="subscription__sizer" data-subscription-sizer aria-hidden="true"></span>
+              <img class="subscription__chevron" src="/assets/icons/chevron-down.svg" alt="" aria-hidden="true" />
+            </label>
+          </div>
           <p class="subscription__note">(Pause or Cancel anytime)</p>
         </div>
 

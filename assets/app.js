@@ -44,6 +44,8 @@ function initGallery(root) {
 
   thumbs.forEach((thumb, i) => {
     thumb.addEventListener("click", () => setActive(i));
+    thumb.addEventListener("mouseenter", () => setActive(i));
+    thumb.addEventListener("focus", () => setActive(i));
   });
 
   if (prevBtn) prevBtn.addEventListener("click", () => setActive(activeIndex - 1));
@@ -72,6 +74,24 @@ function initSelectBox(root) {
     isOpen ? close() : open();
   });
 
+  /* Visual only, per CLAUDE.md: picking a box moves the selection and updates
+     the trigger label, but never navigates — this is the only product page. */
+  const valueEl = root.querySelector(".select-box__value");
+  const options = Array.from(panel.querySelectorAll("[data-dropdown-option]"));
+  options.forEach((option) => {
+    option.addEventListener("click", () => {
+      options.forEach((o) => {
+        const isSelected = o === option;
+        o.classList.toggle("is-selected", isSelected);
+        isSelected ? o.setAttribute("aria-current", "true") : o.removeAttribute("aria-current");
+      });
+      const label = option.querySelector(".select-box__option-label");
+      if (valueEl && label) valueEl.textContent = label.textContent;
+      close();
+      trigger.focus();
+    });
+  });
+
   document.addEventListener("click", (event) => {
     if (trigger.contains(event.target) || panel.contains(event.target)) return;
     close();
@@ -96,13 +116,23 @@ function initOptionGroups(root) {
   });
 }
 
-function initSubscriptionToggle(root) {
-  const row = root.querySelector("[data-subscription-trigger]");
-  if (!row) return;
-  row.addEventListener("click", () => {
-    const isOpen = row.getAttribute("aria-expanded") === "true";
-    row.setAttribute("aria-expanded", isOpen ? "false" : "true");
-  });
+/* A <select> is as wide as its widest option, which would strand the chevron
+   whenever a shorter one is picked. Measure the current label in a hidden twin
+   and size the select to it so the chevron stays tucked against the value. */
+function initSubscriptionSelect(root) {
+  const select = root.querySelector("[data-subscription-select]");
+  const sizer = root.querySelector("[data-subscription-sizer]");
+  if (!select || !sizer) return;
+
+  function fit() {
+    sizer.textContent = select.options[select.selectedIndex].textContent;
+    select.style.width = `${Math.ceil(sizer.getBoundingClientRect().width)}px`;
+  }
+
+  select.addEventListener("change", fit);
+  // Campton loads async; a width measured against the fallback would be wrong.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  fit();
 }
 
 /* ---- Nutrition-facts modal: closed -> modal open -> zoom open.
@@ -139,6 +169,8 @@ function initNutritionModal() {
   const modalCloseBtn = overlay.querySelector("[data-nutrition-close]");
   const zoomCloseBtn = overlay.querySelector("[data-nutrition-close-zoom]");
   const backBtn = overlay.querySelector("[data-nutrition-back]");
+  const grid = overlay.querySelector("[data-nutrition-grid]");
+  const filters = overlay.querySelector("[data-nutrition-filters]");
   const images = Array.from(overlay.querySelectorAll("[data-nutrition-image]"));
   const filterButtons = Array.from(overlay.querySelectorAll("[data-nutrition-filter]"));
 
@@ -206,6 +238,25 @@ function initNutritionModal() {
   backBtn.addEventListener("click", popOneLevel);
   backdrop.addEventListener("click", popOneLevel);
 
+  /* Clicking the empty space around the enlarged image steps back to the
+     modal, the same way clicking the backdrop closes it. Only fires when the
+     target is the zoom layer itself — the image and its buttons are children,
+     so clicks on them don't reach here. The zoom sits above the backdrop, so
+     it needs its own handler. */
+  zoom.addEventListener("click", (event) => {
+    if (event.target === zoom) popOneLevel();
+  });
+
+  /* Same idea one level up. The backdrop only covers what's outside the modal's
+     box, which on a wide screen is a thin strip — so a click landing on the
+     modal's own padding, the gaps between grid items, or the space around the
+     filter pills has to close too. Comparing against the containers means
+     clicks on a pill, an image, the title or the close button are unaffected. */
+  const modalDeadZones = [modal, grid, filters];
+  modal.addEventListener("click", (event) => {
+    if (modalDeadZones.includes(event.target)) popOneLevel();
+  });
+
   document.addEventListener("keydown", (event) => {
     if (!isOpen()) return;
     if (event.key === "Escape") {
@@ -260,7 +311,7 @@ function initPdpHero(nutritionModal) {
   initGallery(root);
   initSelectBox(root);
   initOptionGroups(root);
-  initSubscriptionToggle(root);
+  initSubscriptionSelect(root);
   initNutritionTrigger(root, nutritionModal);
 }
 
